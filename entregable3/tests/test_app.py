@@ -135,3 +135,10 @@ def test_nombres_en_frases_respetan_simbolos():
     assert minuscula("pH") == "pH"
     assert p_valor(2.6e-101) == "< 0.0001"
     assert p_valor(0.0451) == "0.0451"
+
+
+def test_diagnostico_ignora_un_modelo_vacio(aplicacion):
+    from dash.exceptions import PreventUpdate
+    from pages.modelos import diagnostico
+    with pytest.raises(PreventUpdate):
+        diagnostico(None)

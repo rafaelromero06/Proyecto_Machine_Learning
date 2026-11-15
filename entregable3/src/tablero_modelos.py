@@ -9,7 +9,7 @@ from dash import dash_table, dcc, html
 from . import plots
 from .data import DICCIONARIO_VINO, NUMERICAS_VINO, cargar_vinos, json_app, tabla_app
 from .prediccion import ESQUEMA, ORIGINAL, disponibles
-from .tablero import (CORTOS, NOMBRES, como_leer, encabezado, fila, idea, lectura, minuscula, numero, p_valor, pasos, pendiente, tabla, tarjeta,
+from .tablero import (CORTOS, NOMBRES, adivina, como_leer, encabezado, fila, idea, lectura, minuscula, numero, p_valor, pasos, pendiente, tabla, tarjeta,
                       termino)
 
 BALANCEOS = {"sin_balanceo": "Sin balanceo", "class_weight": "Pesos por clase", "SMOTE": "SMOTE", "ADASYN": "ADASYN",
@@ -95,7 +95,13 @@ def tab_lideres():
                       f"El más rápido es {rapido.modelo} ({rapido.prediccion_ms_por_caso:.3f} ms por vino) y el más lento {lento.modelo} "
                       f"({lento.prediccion_ms_por_caso:.2f} ms). Aun el más lento evalúa unos {numero(1000 / lento.prediccion_ms_por_caso)} "
                       "vinos por segundo.")
+    tres = [NOMBRES.get(x, x) for x in orden["modelo"].head(3)]
+    quiz = adivina("¿Qué tipo de modelo crees que distingue mejor los vinos buenos?",
+                   ["Un árbol de decisión", "Una regresión logística", "Muchos árboles combinados", "Los vecinos más parecidos (KNN)"],
+                   "Muchos árboles combinados", f"Los tres primeros ({', '.join(tres[:2])} y {tres[2]}) combinan cientos de árboles y quedan casi "
+                                                "empatados. Los modelos simples, como un solo árbol, quedan al final de la cava.")
     return html.Div([
+        quiz,
         encabezado("¿Qué modelo distingue mejor los vinos buenos?",
                    "Cada botella es un modelo, ya con su mejor configuración. Se llena según su puntaje: cuanto más llena, mejor; vacía "
                    "sería adivinar. Cambia lo que se mide y mira cómo se reordena la cava.", etiqueta="1 · Tabla de líderes"),
@@ -374,7 +380,17 @@ def tab_diagnostico():
         dcc.Slider(id="dec-costo", min=1, max=10, step=1, value=3, updatemode="drag", marks={i: f"{i}×" for i in (1, 3, 5, 7, 10)}),
         lectura("", id="dec-sugerencia"),
     ])
+    dec = json_app("decision.json")
+    quiz = None
+    if dec and ORIGINAL in dec["modelos"]:
+        sens = round(100 * dec["modelos"][ORIGINAL]["vp"][50] / dec["positivos"])
+        opciones = sorted({10, sens, 75, 95})
+        quiz = adivina("Con el corte habitual de 50 %, ¿cuántos de cada 100 vinos buenos crees que encuentra el modelo original?",
+                       [str(o) for o in opciones], str(sens),
+                       f"Encuentra {sens}. Los vinos buenos son minoría y el modelo es prudente: solo dice «bueno» cuando está bastante seguro. "
+                       "Bajando el umbral encuentra muchos más, a cambio de más falsas alarmas. Pruébalo con el deslizador.")
     return html.Div([
+        quiz,
         encabezado("¿Cuánto se equivoca?", "Todo se mide con vinos que el modelo no vio al entrenar. Mueve el umbral y mira cómo cambian los 100 "
                                            "vinos y el punto naranja de las curvas: bajar el umbral encuentra más vinos buenos, pero da más "
                                            "falsas alarmas.", etiqueta="3 · Diagnóstico"),
@@ -453,7 +469,14 @@ def tab_comparacion():
     tabla_todos = dash_table.DataTable(data=pr.to_dict("records"), sort_action="native", page_action="none",
                                        columns=[{"id": c, "name": n, "type": ty, **({"format": fo} if fo else {})} for c, n, ty, fo in columnas],
                                        **ESTILO_TABLA)
+    b = tabla_app("bloques_auc.csv")
+    gana = int((b[ORIGINAL] > b[mejor]).sum())
+    quiz = adivina(f"Frente a {mejor}, el modelo original ganó {gana} de los 25 exámenes. ¿Basta eso para decir que es mejor?", ["Sí", "No"],
+                   "Sí" if v["condicion_2_tres_pruebas"] else "No",
+                   "Ganó muchas veces, pero casi siempre por menos de 0.01 de AUC. Las pruebas estadísticas miden también por cuánto gana, y "
+                   f"solo {sum(v['pruebas_que_rechazan'].values())} de las 4 distinguen esa ventaja del azar.")
     return html.Div([
+        quiz,
         encabezado("¿La ventaja es real o es suerte?", "Los 10 modelos presentaron los mismos 25 exámenes. Cuando uno gana por muy poco, pudo "
                                                        "ser casualidad: las pruebas estadísticas dicen cuándo creerle a la diferencia.",
                    etiqueta="4 · Comparación estadística"),

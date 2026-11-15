@@ -769,6 +769,42 @@
     }
   });
 
+  document.addEventListener("click", function (e) {
+    var boton = e.target && e.target.closest ? e.target.closest(".adivina-opcion") : null;
+    if (!boton) return;
+    var caja = boton.closest(".adivina");
+    if (!caja || caja.classList.contains("respondida")) return;
+    caja.classList.add("respondida");
+    var correcta = caja.dataset.correcta;
+    var acierto = boton.dataset.opcion === correcta;
+    boton.classList.add(acierto ? "acierto" : "fallo");
+    caja.querySelectorAll(".adivina-opcion").forEach(function (o) {
+      o.disabled = true;
+      if (o.dataset.opcion === correcta) o.classList.add("correcta");
+    });
+    var respuesta = caja.querySelector(".adivina-respuesta");
+    if (respuesta) {
+      respuesta.querySelector(".adivina-veredicto").textContent = acierto ? "¡Acertaste! " : "No era esa: la respuesta es «" + correcta + "». ";
+      respuesta.hidden = false;
+    }
+  });
+
+  var barraProgreso = null;
+  var progresoPendiente = false;
+  function medirProgreso() {
+    progresoPendiente = false;
+    barraProgreso = barraProgreso || document.querySelector("#progreso .progreso-barra");
+    if (!barraProgreso) return;
+    var total = document.documentElement.scrollHeight - window.innerHeight;
+    barraProgreso.style.transform = "scaleX(" + (total > 0 ? limitar(window.scrollY / total, 0, 1) : 0).toFixed(4) + ")";
+  }
+  window.addEventListener("scroll", function () {
+    if (progresoPendiente) return;
+    progresoPendiente = true;
+    window.requestAnimationFrame(medirProgreso);
+  }, { passive: true });
+  window.addEventListener("resize", medirProgreso);
+
   window.Cata = { copa: copaDe };
 
   window.dash_clientside = Object.assign({}, window.dash_clientside, {

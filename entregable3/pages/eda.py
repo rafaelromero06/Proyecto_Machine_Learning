@@ -6,7 +6,7 @@ from dash import Input, Output, callback, dcc, html
 from src import plots
 from src.data import DICCIONARIO_VINO, NUMERICAS_VINO, cargar_vinos
 from src.original_model import auc_mann_whitney
-from src.tablero import cifra, como_leer, encabezado, idea, lectura, minuscula, numero, siguiente, tabla, tarjeta, termino
+from src.tablero import adivina, cifra, como_leer, encabezado, idea, lectura, minuscula, numero, siguiente, tabla, tarjeta, termino
 
 dash.register_page(__name__, path="/eda", name="Datos", title="Exploración de los datos · Cata Ciega", order=1)
 
@@ -55,6 +55,18 @@ def resumen():
                                      className="tarjeta idea-clave aparecer"), lg=4, class_name="mb-3") for i, (t, x) in enumerate(ideas)])
 
 
+def pregunta_inicial():
+    bueno = DF["quality"] >= 7
+    dif = diferencias(DF)
+    top = dif.abs().idxmax()
+    otras = [c for c in ("residual sugar", "pH", "fixed acidity", "chlorides") if c != top][:3]
+    opciones = [DICCIONARIO_VINO[c][0] for c in sorted([top] + otras)]
+    unidad = DICCIONARIO_VINO[top][1]
+    return adivina("De las 11 mediciones de laboratorio, ¿cuál crees que distingue más a un vino bueno?", opciones, DICCIONARIO_VINO[top][0],
+                   f"Es {nombre(top)}: los vinos buenos promedian {DF.loc[bueno, top].mean():.3g} {unidad} y los demás "
+                   f"{DF.loc[~bueno, top].mean():.3g}. Lo verás en la huella química, justo abajo.")
+
+
 mesa = html.Div(dbc.Row([
     dbc.Col([html.Label("Tipo de vino", htmlFor="f-tipo", className="campo-etiqueta"),
              dcc.Dropdown(id="f-tipo", options=[{"label": "Tinto", "value": "red"}, {"label": "Blanco", "value": "white"}],
@@ -75,6 +87,7 @@ layout = html.Div([
                "trae su conclusión en una frase."),
     ], fluid="xl"), className="pagina-titulo con-azulejo", style={"--patron": "#4c86e0", "--opacidad": "0.1"}),
     html.Section(dbc.Container([
+        pregunta_inicial(),
         mesa,
         html.Div(id="k-cifras", className="cifras mb-4"),
         dbc.Row([

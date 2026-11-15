@@ -2926,3 +2926,101 @@ abbr[title] {
 .documento {
   overflow-wrap: anywhere;
 }
+
+#progreso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.progreso-barra {
+  height: 100%;
+  background: var(--ocre);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.adivina {
+  max-width: 56rem;
+  margin: 0 0 1.75rem;
+  padding: 1.1rem 1.25rem 1.2rem;
+  border: 1.5px solid var(--cobalto);
+  border-radius: var(--radio);
+  background: var(--esmalte);
+  box-shadow: var(--sombra);
+}
+
+.adivina-etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cobalto);
+}
+
+.adivina-pregunta {
+  margin: 0.35rem 0 0.8rem;
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.3;
+}
+
+.adivina-opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.adivina-opcion {
+  padding: 0.5rem 0.95rem;
+  border: 1.5px solid var(--linea);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--tinta);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s var(--curva);
+}
+
+.adivina-opcion:hover:not(:disabled) {
+  border-color: var(--cobalto);
+  transform: translateY(-2px);
+}
+
+.adivina-opcion:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.adivina-opcion.correcta {
+  opacity: 1;
+  border-color: var(--cobalto);
+  background: var(--cobalto);
+  color: #fff;
+}
+
+.adivina-opcion.fallo {
+  opacity: 1;
+  border-color: var(--ocre);
+  background: var(--ocre-claro);
+  text-decoration: line-through;
+}
+
+.adivina-respuesta {
+  margin-top: 0.9rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 6px;
+  background: var(--cobalto-claro);
+  animation: voltear 0.5s var(--curva) both;
+}
+
+.adivina.respondida {
+  border-color: var(--linea);
+}

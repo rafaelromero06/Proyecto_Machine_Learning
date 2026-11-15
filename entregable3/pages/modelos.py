@@ -7,6 +7,7 @@ import dash_bootstrap_components as dbc
 import numpy as np
 import pandas as pd
 from dash import ALL, MATCH, ClientsideFunction, Input, Output, State, callback, clientside_callback, dcc, html, no_update
+from dash.exceptions import PreventUpdate
 from sklearn.metrics import precision_recall_curve, roc_curve
 
 from src import plots
@@ -168,6 +169,8 @@ def descargar_lote(_, datos):
           Output("g-cal", "figure"), Output("l-cal", "children"), Output("diag-shap", "children"), Input("diag-modelo", "value"))
 def diagnostico(modelo):
     oof = tabla_app("oof_rep1.csv.gz")
+    if oof is None or modelo not in oof.columns:
+        raise PreventUpdate
     y, s = oof["y_evento"].to_numpy(), oof[modelo].to_numpy()
     p = s if modelo != "SVM" else 1 / (1 + np.exp(-s))
     fpr, tpr, _ = roc_curve(y, p)

@@ -50,6 +50,7 @@ app.layout = html.Div([
     dbc.Offcanvas(panel_glosario(), id="glosario", title="Guía rápida y glosario", placement="end", is_open=False, scrollable=True,
                   class_name="panel-glosario"),
     html.Div(id="telon", **{"aria-hidden": "true"}),
+    html.Div(html.Div(className="progreso-barra"), id="progreso", **{"aria-hidden": "true"}),
 ])
 
 

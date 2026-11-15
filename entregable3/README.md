@@ -9,6 +9,15 @@ Autores: Roger Daza, Matteo Del Sole y Rafael Romero.
 - **Dashboard:** «Cata Ciega», aplicación Dash multipágina (`app.py`, `pages/`) con las secciones Contexto, EDA y Modelos, un juego de cata a ciegas y la ficha del modelo, desplegable en Render.
 - **Informe:** Jupyter Book en `book/`.
 
+## Colaboradores
+
+| Integrante | Aporte |
+|---|---|
+| Rafael Romero | Modelo original (Bosque Ordinal Focalizado) |
+| Roger Daza | Análisis exploratorio de datos y tablas |
+| Matteo Del Sole | Integración e informes |
+| Claude (Anthropic) | Diseño del dashboard |
+
 ## Estructura
 
 ```

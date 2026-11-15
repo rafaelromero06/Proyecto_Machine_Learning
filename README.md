@@ -2,6 +2,17 @@
 
 Universidad del Norte. Autores: Roger Daza, Matteo Del Sole y Rafael Romero.
 
+## Colaboradores
+
+| Integrante | Aporte |
+|---|---|
+| Rafael Romero | Modelo original (Bosque Ordinal Focalizado) |
+| Roger Daza | Análisis exploratorio de datos y tablas |
+| Matteo Del Sole | Integración e informes |
+| Claude (Anthropic) | Diseño del dashboard |
+
+## Contenido
+
 | Entrega | Contenido | Carpeta |
 |---|---|---|
 | Entregable 1 | ETL y análisis exploratorio | `eda/`, informe `index.html` |

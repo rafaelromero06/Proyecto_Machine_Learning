@@ -182,6 +182,16 @@ def fila(*columnas, anchos=None, clase="g-4"):
     return dbc.Row([dbc.Col(c, lg=a, md=12) for c, a in zip(columnas, anchos)], className=clase)
 
 
+def adivina(pregunta, opciones, correcta, explicacion):
+    """Pregunta de opción múltiple que el visitante responde antes de ver el resultado; la respuesta se revela en el navegador."""
+    return html.Div([
+        html.Div([html.I(className="bi bi-question-circle", **{"aria-hidden": "true"}), "Antes de mirar, adivina"], className="adivina-etiqueta"),
+        html.P(pregunta, className="adivina-pregunta"),
+        html.Div([html.Button(o, type="button", className="adivina-opcion", **{"data-opcion": o}) for o in opciones], className="adivina-opciones"),
+        html.Div([html.Strong(className="adivina-veredicto"), html.Span(explicacion)], className="adivina-respuesta", hidden=True),
+    ], className="adivina aparecer", role="group", **{"data-correcta": correcta, "aria-label": "Pregunta para adivinar", "aria-live": "polite"})
+
+
 def tabla(columnas, filas, destacar=None):
     """Tabla con encabezados que se explican solos: cada columna es (título, ayuda) y la ayuda aparece al pasar el cursor.
 

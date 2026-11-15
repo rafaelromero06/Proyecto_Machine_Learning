@@ -3,7 +3,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 
 from src.data import DICCIONARIO_VINO, NUMERICAS_VINO, cargar_vinos, json_app, tabla_app
-from src.tablero import AUTORES, ORIGINAL, VERSION, cifra, encabezado, escala_notas, numero, recorrido, siguiente, tarjeta, termino
+from src.tablero import AUTORES, ORIGINAL, VERSION, adivina, cifra, encabezado, escala_notas, numero, recorrido, siguiente, tarjeta, termino
 
 dash.register_page(__name__, path="/", name="Contexto", title="Contexto · Cata Ciega", order=0)
 
@@ -116,6 +116,19 @@ def conclusion():
                               className="boton")])
 
 
+def pregunta_final():
+    v = json_app("veredicto.json")
+    res = tabla_app("lideres.csv")
+    if v is None or res is None:
+        return None
+    puesto = int(res.sort_values("auc_media", ascending=False)["modelo"].tolist().index(ORIGINAL)) + 1
+    opciones = ["Les ganó a todos con claridad", "Empató con los mejores", "Quedó entre los últimos"]
+    correcta = opciones[0] if v["superior"] else (opciones[1] if puesto <= 3 else opciones[2])
+    return adivina("Se compararon 10 modelos, uno de ellos diseñado en este proyecto. ¿Qué crees que le pasó al modelo propio?", opciones,
+                   correcta, "Quedó primero en el promedio, pero su ventaja sobre CatBoost y Random Forest es tan pequeña que las pruebas "
+                             "estadísticas no la distinguen del azar. Abajo están las cifras.")
+
+
 layout = html.Div([
     html.Section(dbc.Container(dbc.Row([
         dbc.Col([
@@ -205,6 +218,7 @@ layout = html.Div([
 
     html.Section(dbc.Container([
         encabezado("¿A qué conclusión se llegó?", "El resumen de las tres entregas, sin adornos.", etiqueta="La respuesta corta"),
+        pregunta_final(),
         html.Div(conclusion(), className="aparecer"),
     ], fluid="xl"), className="banda"),
 
