@@ -1,0 +1,941 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Reproducibilidad y bibliografía &#8212; Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=b4b7a797" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '10_reproducibilidad';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="Conclusiones y limitaciones" href="09_conclusiones.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_correcciones.html">Trazabilidad de las correcciones del Entregable 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_datos.html">Datos: ETL, EDA y auditoría de fuga</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_benchmarks.html">Modelos benchmark y mejores combinaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_literatura.html">Revisión de literatura y novedad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_modelo_original.html">El modelo original: Bosque Ordinal Focalizado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_validacion.html">Protocolo y validación estadística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_evaluacion_ampliada.html">Evaluación ampliada y robustez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_dashboard.html">Dashboard y despliegue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_conclusiones.html">Conclusiones y limitaciones</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Reproducibilidad y bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/rafaelromero06/Proyecto_Machine_Learning" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/10_reproducibilidad.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Reproducibilidad y bibliografía</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entorno">Entorno</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lista-de-verificacion-de-reproducibilidad">Lista de verificación de reproducibilidad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-maestra-de-experimentos">Tabla maestra de experimentos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaracion-de-autoria-y-uso-de-herramientas">Declaración de autoría y uso de herramientas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliografia">Bibliografía</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="reproducibilidad-y-bibliografia">
+<h1>Reproducibilidad y bibliografía<a class="headerlink" href="#reproducibilidad-y-bibliografia" title="Link to this heading">#</a></h1>
+<section id="entorno">
+<h2>Entorno<a class="headerlink" href="#entorno" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">librerias</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"numpy"</span><span class="p">,</span> <span class="s2">"pandas"</span><span class="p">,</span> <span class="s2">"scipy"</span><span class="p">,</span> <span class="s2">"scikit-learn"</span><span class="p">,</span> <span class="s2">"imbalanced-learn"</span><span class="p">,</span> <span class="s2">"xgboost"</span><span class="p">,</span> <span class="s2">"lightgbm"</span><span class="p">,</span> <span class="s2">"catboost"</span><span class="p">,</span> <span class="s2">"optuna"</span><span class="p">,</span> <span class="s2">"shap"</span><span class="p">,</span> <span class="s2">"joblib"</span><span class="p">,</span>
+             <span class="s2">"dash"</span><span class="p">,</span> <span class="s2">"dash-bootstrap-components"</span><span class="p">,</span> <span class="s2">"plotly"</span><span class="p">,</span> <span class="s2">"matplotlib"</span><span class="p">,</span> <span class="s2">"pytest"</span><span class="p">,</span> <span class="s2">"jupyter-book"</span><span class="p">]</span>
+<span class="n">mostrar</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([{</span><span class="s2">"Paquete"</span><span class="p">:</span> <span class="s2">"python"</span><span class="p">,</span> <span class="s2">"Versión"</span><span class="p">:</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">()}]</span> <span class="o">+</span> <span class="p">[{</span><span class="s2">"Paquete"</span><span class="p">:</span> <span class="n">l</span><span class="p">,</span> <span class="s2">"Versión"</span><span class="p">:</span> <span class="n">version_instalada</span><span class="p">(</span><span class="n">l</span><span class="p">)}</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">librerias</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_554b1" class="dataframe tabla-libro">
+  <thead>
+    <tr>
+      <th id="T_554b1_level0_col0" class="col_heading level0 col0" >Paquete</th>
+      <th id="T_554b1_level0_col1" class="col_heading level0 col1" >Versión</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_554b1_row0_col0" class="data row0 col0" >python</td>
+      <td id="T_554b1_row0_col1" class="data row0 col1" >3.12.14</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row1_col0" class="data row1 col0" >numpy</td>
+      <td id="T_554b1_row1_col1" class="data row1 col1" >2.4.4</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row2_col0" class="data row2 col0" >pandas</td>
+      <td id="T_554b1_row2_col1" class="data row2 col1" >3.0.2</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row3_col0" class="data row3 col0" >scipy</td>
+      <td id="T_554b1_row3_col1" class="data row3 col1" >1.17.1</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row4_col0" class="data row4 col0" >scikit-learn</td>
+      <td id="T_554b1_row4_col1" class="data row4 col1" >1.8.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row5_col0" class="data row5 col0" >imbalanced-learn</td>
+      <td id="T_554b1_row5_col1" class="data row5 col1" >0.14.2</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row6_col0" class="data row6 col0" >xgboost</td>
+      <td id="T_554b1_row6_col1" class="data row6 col1" >3.4.1</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row7_col0" class="data row7 col0" >lightgbm</td>
+      <td id="T_554b1_row7_col1" class="data row7 col1" >4.6.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row8_col0" class="data row8 col0" >catboost</td>
+      <td id="T_554b1_row8_col1" class="data row8 col1" >1.2.8</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row9_col0" class="data row9 col0" >optuna</td>
+      <td id="T_554b1_row9_col1" class="data row9 col1" >5.0.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row10_col0" class="data row10 col0" >shap</td>
+      <td id="T_554b1_row10_col1" class="data row10 col1" >0.52.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row11_col0" class="data row11 col0" >joblib</td>
+      <td id="T_554b1_row11_col1" class="data row11 col1" >1.6.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row12_col0" class="data row12 col0" >dash</td>
+      <td id="T_554b1_row12_col1" class="data row12 col1" >3.2.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row13_col0" class="data row13 col0" >dash-bootstrap-components</td>
+      <td id="T_554b1_row13_col1" class="data row13 col1" >2.0.4</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row14_col0" class="data row14 col0" >plotly</td>
+      <td id="T_554b1_row14_col1" class="data row14 col1" >6.3.0</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row15_col0" class="data row15 col0" >matplotlib</td>
+      <td id="T_554b1_row15_col1" class="data row15 col1" >3.10.8</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row16_col0" class="data row16 col0" >pytest</td>
+      <td id="T_554b1_row16_col1" class="data row16 col1" >8.4.2</td>
+    </tr>
+    <tr>
+      <td id="T_554b1_row17_col0" class="data row17 col0" >jupyter-book</td>
+      <td id="T_554b1_row17_col1" class="data row17 col1" >1.0.4.post1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Las versiones exactas están fijadas en <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> (dashboard) y <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> (experimentos, pruebas y libro), y <code class="docutils literal notranslate"><span class="pre">.python-version</span></code> fija Python 3.12.14. El <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> reproduce el entorno del dashboard. Cada <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> de <code class="docutils literal notranslate"><span class="pre">artifacts/</span></code> repite las versiones con que se entrenó el modelo.</p>
+<p><strong>Equipo:</strong> AMD Ryzen 5 5600GT (6 núcleos físicos, 12 lógicos), 15.8 GB de RAM, Windows 11. Los experimentos usaron 11 procesos en paralelo con un hilo por modelo.</p>
+</section>
+<section id="lista-de-verificacion-de-reproducibilidad">
+<h2>Lista de verificación de reproducibilidad<a class="headerlink" href="#lista-de-verificacion-de-reproducibilidad" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Ítem</p></th>
+<th class="head"><p>Dónde</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Dashboard desplegado</p></td>
+<td><p>https://calidad-vino-ml-24mf.onrender.com/</p></td>
+</tr>
+<tr class="row-odd"><td><p>Código público y versionado</p></td>
+<td><p>https://github.com/rafaelromero06/Proyecto_Machine_Learning, carpeta <code class="docutils literal notranslate"><span class="pre">entregable3/</span></code> (<em>release</em> <code class="docutils literal notranslate"><span class="pre">v1.0</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p>Identificador persistente</p></td>
+<td><p>PENDIENTE: DOI de Zenodo de la <em>release</em> final</p></td>
+</tr>
+<tr class="row-odd"><td><p>Protocolo pre-registrado con fecha</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">experiments/protocolo.md</span></code>, commit <code class="docutils literal notranslate"><span class="pre">8bc0c2d</span></code>, tag <code class="docutils literal notranslate"><span class="pre">protocolo-e3-v1</span></code> (26/10/2026)</p></td>
+</tr>
+<tr class="row-even"><td><p>Datos u obtención exacta</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">data/</span></code> (vino y conjuntos adicionales, sin modificar) y <code class="docutils literal notranslate"><span class="pre">data/adicionales/procedencia.json</span></code> con los DOI de UCI</p></td>
+</tr>
+<tr class="row-odd"><td><p>Semillas</p></td>
+<td><p>particiones 42–46; estimadores 42; optimizador = semilla de la repetición + pliegue; robustez: semillas 0–9</p></td>
+</tr>
+<tr class="row-even"><td><p>Rangos de hiperparámetros</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/benchmarks.py::ESPACIOS</span></code> y capítulo 3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Número de ejecuciones</p></td>
+<td><p><span class="pasted-text">450</span> pliegues externos (10 modelos × 25 en vino y 10 × 5 en cada conjunto adicional), 40 evaluaciones de hiperparámetros cada uno</p></td>
+</tr>
+<tr class="row-even"><td><p>Medidas de dispersión</p></td>
+<td><p>media ± desviación estándar en 25 bloques, intervalos bootstrap y BCa, cajas por semilla</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pruebas unitarias</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tests/</span></code> (pytest), ejecutadas en cada <em>push</em> por GitHub Actions</p></td>
+</tr>
+<tr class="row-even"><td><p>Tiempo de cómputo</p></td>
+<td><p><span class="pasted-text">97.8</span> horas de CPU solo en la búsqueda de la validación principal; ver capítulo 3 por modelo</p></td>
+</tr>
+<tr class="row-odd"><td><p>Entorno fijado</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">requirements*.txt</span></code>, <code class="docutils literal notranslate"><span class="pre">.python-version</span></code>, <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Orden de ejecución</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">README.md</span></code> y <code class="docutils literal notranslate"><span class="pre">experiments/ejecutar_todo.py</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="tabla-maestra-de-experimentos">
+<h2>Tabla maestra de experimentos<a class="headerlink" href="#tabla-maestra-de-experimentos" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">maestra</span> <span class="o">=</span> <span class="n">resultado</span><span class="p">(</span><span class="s2">"tabla_maestra_e3.csv"</span><span class="p">)</span>
+<span class="n">resumen</span> <span class="o">=</span> <span class="n">maestra</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">"origen"</span><span class="p">,</span> <span class="s2">"conjunto"</span><span class="p">,</span> <span class="s2">"tarea"</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s2">"filas"</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">mostrar</span><span class="p">(</span><span class="n">resumen</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"origen"</span><span class="p">:</span> <span class="s2">"Origen"</span><span class="p">,</span> <span class="s2">"conjunto"</span><span class="p">:</span> <span class="s2">"Conjunto"</span><span class="p">,</span> <span class="s2">"tarea"</span><span class="p">:</span> <span class="s2">"Tarea"</span><span class="p">,</span> <span class="s2">"filas"</span><span class="p">:</span> <span class="s2">"Combinaciones"</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_98b31" class="dataframe tabla-libro">
+  <thead>
+    <tr>
+      <th id="T_98b31_level0_col0" class="col_heading level0 col0" >Origen</th>
+      <th id="T_98b31_level0_col1" class="col_heading level0 col1" >Conjunto</th>
+      <th id="T_98b31_level0_col2" class="col_heading level0 col2" >Tarea</th>
+      <th id="T_98b31_level0_col3" class="col_heading level0 col3" >Combinaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_98b31_row0_col0" class="data row0 col0" >Entregable 2</td>
+      <td id="T_98b31_row0_col1" class="data row0 col1" >vino</td>
+      <td id="T_98b31_row0_col2" class="data row0 col2" >clasificacion</td>
+      <td id="T_98b31_row0_col3" class="data row0 col3" >108</td>
+    </tr>
+    <tr>
+      <td id="T_98b31_row1_col0" class="data row1 col0" >Entregable 2</td>
+      <td id="T_98b31_row1_col1" class="data row1 col1" >vino</td>
+      <td id="T_98b31_row1_col2" class="data row1 col2" >regresion</td>
+      <td id="T_98b31_row1_col3" class="data row1 col3" >28</td>
+    </tr>
+    <tr>
+      <td id="T_98b31_row2_col0" class="data row2 col0" >Entregable 3</td>
+      <td id="T_98b31_row2_col1" class="data row2 col1" >abalone</td>
+      <td id="T_98b31_row2_col2" class="data row2 col2" >clasificacion</td>
+      <td id="T_98b31_row2_col3" class="data row2 col3" >10</td>
+    </tr>
+    <tr>
+      <td id="T_98b31_row3_col0" class="data row3 col0" >Entregable 3</td>
+      <td id="T_98b31_row3_col1" class="data row3 col1" >cardiotocografia</td>
+      <td id="T_98b31_row3_col2" class="data row3 col2" >clasificacion</td>
+      <td id="T_98b31_row3_col3" class="data row3 col3" >10</td>
+    </tr>
+    <tr>
+      <td id="T_98b31_row4_col0" class="data row4 col0" >Entregable 3</td>
+      <td id="T_98b31_row4_col1" class="data row4 col1" >corazon</td>
+      <td id="T_98b31_row4_col2" class="data row4 col2" >clasificacion</td>
+      <td id="T_98b31_row4_col3" class="data row4 col3" >10</td>
+    </tr>
+    <tr>
+      <td id="T_98b31_row5_col0" class="data row5 col0" >Entregable 3</td>
+      <td id="T_98b31_row5_col1" class="data row5 col1" >estudiantes</td>
+      <td id="T_98b31_row5_col2" class="data row5 col2" >clasificacion</td>
+      <td id="T_98b31_row5_col3" class="data row5 col3" >10</td>
+    </tr>
+    <tr>
+      <td id="T_98b31_row6_col0" class="data row6 col0" >Entregable 3</td>
+      <td id="T_98b31_row6_col1" class="data row6 col1" >vino</td>
+      <td id="T_98b31_row6_col2" class="data row6 col2" >clasificacion</td>
+      <td id="T_98b31_row6_col3" class="data row6 col3" >10</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">experiments/resultados/tabla_maestra_e3.csv</span></code> reúne las 136 combinaciones del Entregable 2 (108 de clasificación y 28 de regresión, con 36 indicadores cada una) y las 50 filas del Entregable 3 (10 modelos × 5 conjuntos) con el esquema de validación, las repeticiones, las semillas, las métricas del bucle externo (media y desviación), las evaluaciones y los tiempos.</p>
+</section>
+<section id="declaracion-de-autoria-y-uso-de-herramientas">
+<h2>Declaración de autoría y uso de herramientas<a class="headerlink" href="#declaracion-de-autoria-y-uso-de-herramientas" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Integrante</p></th>
+<th class="head"><p>Aporte principal</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Rafael Romero</p></td>
+<td><p>Modelo original (Bosque Ordinal Focalizado)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Roger Daza</p></td>
+<td><p>Análisis exploratorio de datos y tablas</p></td>
+</tr>
+<tr class="row-even"><td><p>Matteo Del Sole</p></td>
+<td><p>Integración e informes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Claude (Anthropic)</p></td>
+<td><p>Asistente de inteligencia artificial: diseño del dashboard, apoyo en la programación, la ejecución de los experimentos y la redacción (detalle en el capítulo 9)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Herramientas usadas: Python con numpy, scipy, pandas y scikit-learn como herramientas de cálculo; XGBoost, LightGBM y CatBoost solo como modelos de comparación; Optuna para la búsqueda de hiperparámetros; SHAP para la interpretabilidad; Dash, dash-bootstrap-components y Plotly para el dashboard; Jupyter Book para este informe; GitHub, GitHub Actions, Render y Zenodo para el código, las pruebas, el despliegue y el archivo; y Claude (Anthropic) mediante Claude Code, en los usos que declara el capítulo 9.</p>
+<p>Al firmar, cada integrante declara que el trabajo es del equipo, que revisó el código y el informe, que entiende el funcionamiento del modelo original y de las pruebas, que puede explicarlos y modificarlos en la sustentación, y que asume la responsabilidad por su contenido.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Integrante</p></th>
+<th class="head"><p>Firma</p></th>
+<th class="head"><p>Fecha</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Roger Daza</p></td>
+<td><p><em>Roger Daza</em></p></td>
+<td><p>15 de noviembre de 2026</p></td>
+</tr>
+<tr class="row-odd"><td><p>Matteo Del Sole</p></td>
+<td><p><em>Matteo Del Sole</em></p></td>
+<td><p>15 de noviembre de 2026</p></td>
+</tr>
+<tr class="row-even"><td><p>Rafael Romero</p></td>
+<td><p><em>Rafael Romero</em></p></td>
+<td><p>15 de noviembre de 2026</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="bibliografia">
+<h2>Bibliografía<a class="headerlink" href="#bibliografia" title="Link to this heading">#</a></h2>
+<div class="docutils container" id="id1">
+<div role="list" class="citation-list">
+<div class="citation" id="id15" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AR06<span class="fn-bracket">]</span></span>
+<p>Douglas G Altman and Patrick Royston. The cost of dichotomising continuous variables. <em>BMJ</em>, 332(7549):1080.1, 2006. URL: <a class="reference external" href="http://dx.doi.org/10.1136/bmj.332.7549.1080">http://dx.doi.org/10.1136/bmj.332.7549.1080</a>, <a class="reference external" href="https://doi.org/10.1136/bmj.332.7549.1080">doi:10.1136/bmj.332.7549.1080</a>.</p>
+</div>
+<div class="citation" id="id31" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AB23<span class="fn-bracket">]</span></span>
+<p>Anastasios N. Angelopoulos and Stephen Bates. Conformal prediction: a gentle introduction. <em>Foundations and Trends® in Machine Learning</em>, 16(4):494–591, 2023. URL: <a class="reference external" href="http://dx.doi.org/10.1561/2200000101">http://dx.doi.org/10.1561/2200000101</a>, <a class="reference external" href="https://doi.org/10.1561/2200000101">doi:10.1561/2200000101</a>.</p>
+</div>
+<div class="citation" id="id46" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AGMEGR+26<span class="fn-bracket">]</span></span>
+<p>Rafael Ayllón-Gavilán, Francisco José Martínez-Estudillo, David Guijo-Rubio, César Hervás-Martínez, and Pedro Antonio Gutiérrez. Splitting criteria for ordinal decision trees: an experimental study. <em>Pattern Recognition</em>, 171:112273, 2026. URL: <a class="reference external" href="http://dx.doi.org/10.1016/j.patcog.2025.112273">http://dx.doi.org/10.1016/j.patcog.2025.112273</a>, <a class="reference external" href="https://doi.org/10.1016/j.patcog.2025.112273">doi:10.1016/j.patcog.2025.112273</a>.</p>
+</div>
+<div class="citation" id="id63" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BCDemvsarZ17<span class="fn-bracket">]</span></span>
+<p>Alessio Benavoli, Giorgio Corani, Janez Demšar, and Marco Zaffalon. Time for a change: a tutorial for comparing multiple classifiers through bayesian analysis. <em>Journal of Machine Learning Research</em>, 18(77):1–36, 2017.</p>
+</div>
+<div class="citation" id="id30" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BF18<span class="fn-bracket">]</span></span>
+<p>Emily M. Bender and Batya Friedman. Data statements for natural language processing: toward mitigating system bias and enabling better science. <em>Transactions of the Association for Computational Linguistics</em>, 6:587–604, 2018. URL: <a class="reference external" href="http://dx.doi.org/10.1162/tacl_a_00041">http://dx.doi.org/10.1162/tacl_a_00041</a>, <a class="reference external" href="https://doi.org/10.1162/tacl_a_00041">doi:10.1162/tacl_a_00041</a>.</p>
+</div>
+<div class="citation" id="id21" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BF04<span class="fn-bracket">]</span></span>
+<p>Remco R. Bouckaert and Eibe Frank. <em>Evaluating the Replicability of Significance Tests for Comparing Learning Algorithms</em>, pages 3–12. Springer Berlin Heidelberg, 2004. URL: <a class="reference external" href="http://dx.doi.org/10.1007/978-3-540-24775-3_3">http://dx.doi.org/10.1007/978-3-540-24775-3_3</a>, <a class="reference external" href="https://doi.org/10.1007/978-3-540-24775-3_3">doi:10.1007/978-3-540-24775-3_3</a>.</p>
+</div>
+<div class="citation" id="id67" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BV04<span class="fn-bracket">]</span></span>
+<p>Stephen Boyd and Lieven Vandenberghe. <em>Convex Optimization</em>. Cambridge University Press, 2004.</p>
+</div>
+<div class="citation" id="id3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Bre01<span class="fn-bracket">]</span></span>
+<p>Leo Breiman. Random forests. <em>Machine Learning</em>, 45(1):5–32, 2001. URL: <a class="reference external" href="http://dx.doi.org/10.1023/A:1010933404324">http://dx.doi.org/10.1023/A:1010933404324</a>, <a class="reference external" href="https://doi.org/10.1023/a:1010933404324">doi:10.1023/a:1010933404324</a>.</p>
+</div>
+<div class="citation" id="id35" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BRI50<span class="fn-bracket">]</span></span>
+<p>GLENN W. BRIER. Verification of forecasts expressed in terms of probability. <em>Monthly Weather Review</em>, 78(1):1–3, 1950. URL: <a class="reference external" href="http://dx.doi.org/10.1175/1520-0493(1950)078&lt;0001:VOFEIT&gt;2.0.CO;2">http://dx.doi.org/10.1175/1520-0493(1950)078&lt;0001:VOFEIT&gt;2.0.CO;2</a>, <a class="reference external" href="https://doi.org/10.1175/1520-0493(1950)078&lt;0001:vofeit&gt;2.0.co;2">doi:10.1175/1520-0493(1950)078&lt;0001:vofeit&gt;2.0.co;2</a>.</p>
+</div>
+<div class="citation" id="id11" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Buc24<span class="fn-bracket">]</span></span>
+<p>Philip Buczak. Frequency‐adjusted borders ordinal forest: a novel tree ensemble method for ordinal prediction. <em>British Journal of Mathematical and Statistical Psychology</em>, 78(2):594–616, 2024. URL: <a class="reference external" href="http://dx.doi.org/10.1111/bmsp.12375">http://dx.doi.org/10.1111/bmsp.12375</a>, <a class="reference external" href="https://doi.org/10.1111/bmsp.12375">doi:10.1111/bmsp.12375</a>.</p>
+</div>
+<div class="citation" id="id32" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CLV08<span class="fn-bracket">]</span></span>
+<p>Stéphan Clémençon, Gábor Lugosi, and Nicolas Vayatis. Ranking and empirical minimization of u-statistics. <em>The Annals of Statistics</em>, 36(2):844–874, 2008. URL: <a class="reference external" href="http://dx.doi.org/10.1214/009052607000000910">http://dx.doi.org/10.1214/009052607000000910</a>, <a class="reference external" href="https://doi.org/10.1214/009052607000000910">doi:10.1214/009052607000000910</a>.</p>
+</div>
+<div class="citation" id="id25" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CB15<span class="fn-bracket">]</span></span>
+<p>Giorgio Corani and Alessio Benavoli. A bayesian approach for comparing cross-validated algorithms on multiple data sets. <em>Machine Learning</em>, 100(2-3):285–304, 2015. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s10994-015-5486-z">http://dx.doi.org/10.1007/s10994-015-5486-z</a>, <a class="reference external" href="https://doi.org/10.1007/s10994-015-5486-z">doi:10.1007/s10994-015-5486-z</a>.</p>
+</div>
+<div class="citation" id="id2" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CCA+09<span class="fn-bracket">]</span></span>
+<p>Paulo Cortez, António Cerdeira, Fernando Almeida, Telmo Matos, and José Reis. Modeling wine preferences by data mining from physicochemical properties. <em>Decision Support Systems</em>, 47(4):547–553, 2009. URL: <a class="reference external" href="http://dx.doi.org/10.1016/j.dss.2009.05.016">http://dx.doi.org/10.1016/j.dss.2009.05.016</a>, <a class="reference external" href="https://doi.org/10.1016/j.dss.2009.05.016">doi:10.1016/j.dss.2009.05.016</a>.</p>
+</div>
+<div class="citation" id="id61" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Demvsar06<span class="fn-bracket">]</span></span>
+<p>Janez Demšar. Statistical comparisons of classifiers over multiple data sets. <em>Journal of Machine Learning Research</em>, 7:1–30, 2006.</p>
+</div>
+<div class="citation" id="id43" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Die98<span class="fn-bracket">]</span></span>
+<p>Thomas G. Dietterich. Approximate statistical tests for comparing supervised classification learning algorithms. <em>Neural Computation</em>, 10(7):1895–1923, 1998. URL: <a class="reference external" href="http://dx.doi.org/10.1162/089976698300017197">http://dx.doi.org/10.1162/089976698300017197</a>, <a class="reference external" href="https://doi.org/10.1162/089976698300017197">doi:10.1162/089976698300017197</a>.</p>
+</div>
+<div class="citation" id="id27" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Efr87<span class="fn-bracket">]</span></span>
+<p>Bradley Efron. Better bootstrap confidence intervals. <em>Journal of the American Statistical Association</em>, 82(397):171–185, 1987. URL: <a class="reference external" href="http://dx.doi.org/10.1080/01621459.1987.10478410">http://dx.doi.org/10.1080/01621459.1987.10478410</a>, <a class="reference external" href="https://doi.org/10.1080/01621459.1987.10478410">doi:10.1080/01621459.1987.10478410</a>.</p>
+</div>
+<div class="citation" id="id36" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Eps69<span class="fn-bracket">]</span></span>
+<p>Edward S. Epstein. A scoring system for probability forecasts of ranked categories. <em>Journal of Applied Meteorology</em>, 8(6):985–987, 1969. URL: <a class="reference external" href="http://dx.doi.org/10.1175/1520-0450(1969)008&lt;0985:ASSFPF&gt;2.0.CO;2">http://dx.doi.org/10.1175/1520-0450(1969)008&lt;0985:ASSFPF&gt;2.0.CO;2</a>, <a class="reference external" href="https://doi.org/10.1175/1520-0450(1969)008&lt;0985:assfpf&gt;2.0.co;2">doi:10.1175/1520-0450(1969)008&lt;0985:assfpf&gt;2.0.co;2</a>.</p>
+</div>
+<div class="citation" id="id5" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>FH01<span class="fn-bracket">]</span></span>
+<p>Eibe Frank and Mark Hall. <em>A Simple Approach to Ordinal Classification</em>, pages 145–156. Springer Berlin Heidelberg, 2001. URL: <a class="reference external" href="http://dx.doi.org/10.1007/3-540-44795-4_13">http://dx.doi.org/10.1007/3-540-44795-4_13</a>, <a class="reference external" href="https://doi.org/10.1007/3-540-44795-4_13">doi:10.1007/3-540-44795-4_13</a>.</p>
+</div>
+<div class="citation" id="id4" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GEW06<span class="fn-bracket">]</span></span>
+<p>Pierre Geurts, Damien Ernst, and Louis Wehenkel. Extremely randomized trees. <em>Machine Learning</em>, 63(1):3–42, 2006. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s10994-006-6226-1">http://dx.doi.org/10.1007/s10994-006-6226-1</a>, <a class="reference external" href="https://doi.org/10.1007/s10994-006-6226-1">doi:10.1007/s10994-006-6226-1</a>.</p>
+</div>
+<div class="citation" id="id14" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GR07<span class="fn-bracket">]</span></span>
+<p>Tilmann Gneiting and Adrian E Raftery. Strictly proper scoring rules, prediction, and estimation. <em>Journal of the American Statistical Association</em>, 102(477):359–378, 2007. URL: <a class="reference external" href="http://dx.doi.org/10.1198/016214506000001437">http://dx.doi.org/10.1198/016214506000001437</a>, <a class="reference external" href="https://doi.org/10.1198/016214506000001437">doi:10.1198/016214506000001437</a>.</p>
+</div>
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GR11<span class="fn-bracket">]</span></span>
+<p>Tilmann Gneiting and Roopesh Ranjan. Comparing density forecasts using threshold- and quantile-weighted scoring rules. <em>Journal of Business &amp; Economic Statistics</em>, 29(3):411–422, 2011. URL: <a class="reference external" href="http://dx.doi.org/10.1198/jbes.2010.08110">http://dx.doi.org/10.1198/jbes.2010.08110</a>, <a class="reference external" href="https://doi.org/10.1198/jbes.2010.08110">doi:10.1198/jbes.2010.08110</a>.</p>
+</div>
+<div class="citation" id="id68" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GOV22<span class="fn-bracket">]</span></span>
+<p>Léo Grinsztajn, Edouard Oyallon, and Gaël Varoquaux. Why do tree-based models still outperform deep learning on typical tabular data? In <em>Advances in Neural Information Processing Systems, Datasets and Benchmarks Track</em>, volume 35. 2022.</p>
+</div>
+<div class="citation" id="id47" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Har18<span class="fn-bracket">]</span></span>
+<p>Frank Harrell. Information gain from using ordinal instead of binary outcomes. Statistical Thinking (blog), 2018. URL: <a class="reference external" href="https://doi.org/10.59350/sq5ca-yck12">https://doi.org/10.59350/sq5ca-yck12</a>, <a class="reference external" href="https://doi.org/10.59350/sq5ca-yck12">doi:10.59350/sq5ca-yck12</a>.</p>
+</div>
+<div class="citation" id="id7" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Hor19<span class="fn-bracket">]</span></span>
+<p>Roman Hornung. Ordinal forests. <em>Journal of Classification</em>, 37(1):4–17, 2019. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s00357-018-9302-x">http://dx.doi.org/10.1007/s00357-018-9302-x</a>, <a class="reference external" href="https://doi.org/10.1007/s00357-018-9302-x">doi:10.1007/s00357-018-9302-x</a>.</p>
+</div>
+<div class="citation" id="id57" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>KMF+17<span class="fn-bracket">]</span></span>
+<p>Guolin Ke, Qi Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei Ye, and Tie-Yan Liu. Lightgbm: a highly efficient gradient boosting decision tree. In <em>Advances in Neural Information Processing Systems</em>, volume 30, 3146–3154. 2017.</p>
+</div>
+<div class="citation" id="id9" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>LO24<span class="fn-bracket">]</span></span>
+<p>Michael Lechner and Gabriel Okasa. Random forest estimation of the ordered choice model. <em>Empirical Economics</em>, 68(1):1–106, 2024. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s00181-024-02646-4">http://dx.doi.org/10.1007/s00181-024-02646-4</a>, <a class="reference external" href="https://doi.org/10.1007/s00181-024-02646-4">doi:10.1007/s00181-024-02646-4</a>.</p>
+</div>
+<div class="citation" id="id28" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>McC80<span class="fn-bracket">]</span></span>
+<p>Peter McCullagh. Regression models for ordinal data. <em>Journal of the Royal Statistical Society Series B: Statistical Methodology</em>, 42(2):109–127, 1980. URL: <a class="reference external" href="http://dx.doi.org/10.1111/j.2517-6161.1980.tb01109.x">http://dx.doi.org/10.1111/j.2517-6161.1980.tb01109.x</a>, <a class="reference external" href="https://doi.org/10.1111/j.2517-6161.1980.tb01109.x">doi:10.1111/j.2517-6161.1980.tb01109.x</a>.</p>
+</div>
+<div class="citation" id="id29" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MWZ+19<span class="fn-bracket">]</span></span>
+<p>Margaret Mitchell, Simone Wu, Andrew Zaldivar, Parker Barnes, Lucy Vasserman, Ben Hutchinson, Elena Spitzer, Inioluwa Deborah Raji, and Timnit Gebru. Model cards for model reporting. In <em>Proceedings of the Conference on Fairness, Accountability, and Transparency</em>, FAT* ’19, 220–229. ACM, 2019. URL: <a class="reference external" href="http://dx.doi.org/10.1145/3287560.3287596">http://dx.doi.org/10.1145/3287560.3287596</a>, <a class="reference external" href="https://doi.org/10.1145/3287560.3287596">doi:10.1145/3287560.3287596</a>.</p>
+</div>
+<div class="citation" id="id20" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>NB03<span class="fn-bracket">]</span></span>
+<p>Claude Nadeau and Yoshua Bengio. Inference for the generalization error. <em>Machine Learning</em>, 52(3):239–281, 2003. URL: <a class="reference external" href="http://dx.doi.org/10.1023/A:1024068626366">http://dx.doi.org/10.1023/A:1024068626366</a>, <a class="reference external" href="https://doi.org/10.1023/a:1024068626366">doi:10.1023/a:1024068626366</a>.</p>
+</div>
+<div class="citation" id="id12" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Pic07<span class="fn-bracket">]</span></span>
+<p>Raffaella Piccarreta. Classification trees for ordinal variables. <em>Computational Statistics</em>, 23(3):407–427, 2007. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s00180-007-0077-5">http://dx.doi.org/10.1007/s00180-007-0077-5</a>, <a class="reference external" href="https://doi.org/10.1007/s00180-007-0077-5">doi:10.1007/s00180-007-0077-5</a>.</p>
+</div>
+<div class="citation" id="id58" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>PGV+18<span class="fn-bracket">]</span></span>
+<p>Liudmila Prokhorenkova, Gleb Gusev, Aleksandr Vorobev, Anna Veronika Dorogush, and Andrey Gulin. Catboost: unbiased boosting with categorical features. In <em>Advances in Neural Information Processing Systems</em>, volume 31, 6638–6648. 2018.</p>
+</div>
+<div class="citation" id="id8" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Tut21<span class="fn-bracket">]</span></span>
+<p>Gerhard Tutz. Ordinal trees and random forests: score-free recursive partitioning and improved ensembles. <em>Journal of Classification</em>, 39(2):241–263, 2021. URL: <a class="reference external" href="http://dx.doi.org/10.1007/s00357-021-09406-4">http://dx.doi.org/10.1007/s00357-021-09406-4</a>, <a class="reference external" href="https://doi.org/10.1007/s00357-021-09406-4">doi:10.1007/s00357-021-09406-4</a>.</p>
+</div>
+<div class="citation" id="id73" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>InternationalOoVaWine24<span class="fn-bracket">]</span></span>
+<p>International Organisation of Vine and Wine. Annual assessment of the world vine and wine sector in 2023. Technical Report, OIV, 2024. URL: <a class="reference external" href="https://www.oiv.int/sites/default/files/documents/Annual_Assessment_2023.pdf">https://www.oiv.int/sites/default/files/documents/Annual_Assessment_2023.pdf</a>.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="09_conclusiones.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Conclusiones y limitaciones</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entorno">Entorno</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lista-de-verificacion-de-reproducibilidad">Lista de verificación de reproducibilidad</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tabla-maestra-de-experimentos">Tabla maestra de experimentos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaracion-de-autoria-y-uso-de-herramientas">Declaración de autoría y uso de herramientas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliografia">Bibliografía</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Roger Daza, Matteo Del Sole y Rafael Romero
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

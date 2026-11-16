@@ -7,7 +7,7 @@ Autores: Roger Daza, Matteo Del Sole y Rafael Romero.
 - **Modelo original:** Bosque Ordinal Focalizado (`src/original_model.py`), programado desde cero con numpy y scipy.
 - **Protocolo pre-registrado:** `experiments/protocolo.md`, congelado con la etiqueta de Git `protocolo-e3-v1` (26 de octubre de 2026).
 - **Dashboard:** «Cata Ciega», aplicación Dash multipágina (`app.py`, `pages/`) con las secciones Contexto, EDA y Modelos, un juego de cata a ciegas y la ficha del modelo, publicada en https://calidad-vino-ml-24mf.onrender.com/
-- **Informe:** Jupyter Book en `book/`.
+- **Informe:** Jupyter Book en `book/`, publicado en https://rafaelromero06.github.io/Proyecto_Machine_Learning/entregable3/libro/intro.html (copia compilada en `libro/`).
 
 ## Colaboradores
 

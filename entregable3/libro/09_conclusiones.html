@@ -1,0 +1,606 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Conclusiones y limitaciones &#8212; Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=b4b7a797" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '09_conclusiones';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Reproducibilidad y bibliografía" href="10_reproducibilidad.html" />
+    <link rel="prev" title="Dashboard y despliegue" href="08_dashboard.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_correcciones.html">Trazabilidad de las correcciones del Entregable 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_datos.html">Datos: ETL, EDA y auditoría de fuga</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_benchmarks.html">Modelos benchmark y mejores combinaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_literatura.html">Revisión de literatura y novedad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_modelo_original.html">El modelo original: Bosque Ordinal Focalizado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_validacion.html">Protocolo y validación estadística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_evaluacion_ampliada.html">Evaluación ampliada y robustez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_dashboard.html">Dashboard y despliegue</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Conclusiones y limitaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_reproducibilidad.html">Reproducibilidad y bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/rafaelromero06/Proyecto_Machine_Learning" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/09_conclusiones.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Conclusiones y limitaciones</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos">Hallazgos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#veredicto-sobre-r1-r2-y-r3">Veredicto sobre R1, R2 y R3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones">Limitaciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riesgos-y-usos-inadecuados">Riesgos y usos inadecuados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trabajo-futuro">Trabajo futuro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaracion-de-uso-de-herramientas-de-inteligencia-artificial">Declaración de uso de herramientas de inteligencia artificial</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="conclusiones-y-limitaciones">
+<h1>Conclusiones y limitaciones<a class="headerlink" href="#conclusiones-y-limitaciones" title="Link to this heading">#</a></h1>
+<section id="hallazgos">
+<h2>Hallazgos<a class="headerlink" href="#hallazgos" title="Link to this heading">#</a></h2>
+<p>La química permite anticipar si un vino Vinho Verde obtendrá una nota de 7 o más con un AUC cercano a 0.86: de cada 100 parejas formadas por un vino bueno y uno que no lo es, los mejores modelos ordenan bien unas 86. Ninguna variable basta por sí sola (la correlación más alta con la nota es de 0.47, la del alcohol) y la dificultad se concentra en la frontera entre las notas 6 y 7, que reúne al 60 % de los vinos.</p>
+<p>Entre los 9 benchmarks, CatBoost y Random Forest son los mejores y quedan a menos de una desviación estándar entre sí. La elección del modelo importa mucho más que la del balanceo o la del optimizador, como ya mostraba el Entregable 2.</p>
+<p>El Bosque Ordinal Focalizado obtiene el AUC medio más alto de los 10 modelos (0.8649 frente a 0.8631 de CatBoost), supera con las tres pruebas pareadas a 7 de los 9 benchmarks y es el mejor calibrado junto con Random Forest. Frente a CatBoost y Random Forest la diferencia no se distingue del azar de las particiones. Sus ventajas más claras no están en el AUC medio: es el modelo fuerte que mejor se transfiere de tintos a blancos y viceversa, el que menos pierde cuando las notas tienen ruido y el mejor con pocos datos. Sus costos son el tiempo de ajuste y la memoria.</p>
+<p>La ablación indica que ninguna pieza del mecanismo cambia mucho el resultado por sí sola: quitar la combinación de umbrales produce la mayor caída (0.0037 de AUC) y la única caída confirmada por las pruebas es la de dar el mismo peso a todos los umbrales (0.0018). La calibración no cambia el AUC, pero reduce el puntaje de Brier de 0.139 a 0.108.</p>
+</section>
+<section id="veredicto-sobre-r1-r2-y-r3">
+<h2>Veredicto sobre R1, R2 y R3<a class="headerlink" href="#veredicto-sobre-r1-r2-y-r3" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Condición</p></th>
+<th class="head"><p>Veredicto</p></th>
+<th class="head"><p>Evidencia</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>R1. Novedad en la aplicación</p></td>
+<td><p>Se cumple, con la evidencia disponible</p></td>
+<td><p>Capítulo 4: búsqueda en 4 bases, 8 cadenas, citas desde 6 trabajos y repositorios; ningún trabajo usa el mecanismo para la calidad del vino ni para otro evento binario definido por un corte ordinal</p></td>
+</tr>
+<tr class="row-odd"><td><p>R2. Implementación algorítmica propia</p></td>
+<td><p>Se cumple</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">src/original_model.py</span></code>: crecimiento de los árboles, criterio de partición, agregación y calibración programados con numpy y scipy; 26 pruebas unitarias</p></td>
+</tr>
+<tr class="row-even"><td><p>R3. Superioridad estadística</p></td>
+<td><p>El modelo es <strong><span class="pasted-text">no superior</span></strong> según la regla pre-registrada</p></td>
+<td><p>Capítulo 6</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>El resultado de R3 es negativo y se reporta como tal. La regla exigía cuatro condiciones a la vez y el BOF cumple dos: tiene el mejor AUC medio y un tamaño de efecto pareado no despreciable, pero solo dos de las cuatro pruebas rechazan la igualdad frente a CatBoost y no gana en ninguno de los cuatro conjuntos adicionales. La afirmación de novedad (R1) descansa en una búsqueda que no cubrió bases de pago; no prueba que el mecanismo no exista y debe repetirse antes de la entrega final.</p>
+<p>Hay tres causas probables. La primera es un techo impuesto por los datos: los tres mejores modelos, muy distintos entre sí, llegan al mismo AUC, y el error se concentra en la frontera entre 6 y 7, donde la química casi no distingue a los vinos y la nota, mediana de pocos catadores, es ruidosa. La información ordinal ayuda a ordenar los extremos de la escala, pero no esa frontera. La segunda es de potencia: con 25 bloques que comparten vinos, la t corregida necesita diferencias mucho mayores que 0.002 de AUC para rechazar. La tercera es de diseño: la ablación muestra que el mecanismo aporta poco sobre un bosque de árboles extremadamente aleatorizados, y la búsqueda de hiperparámetros no encontró la mejor configuración (el estudio de sensibilidad obtiene un AUC mayor con menos variables candidatas por corte). En los conjuntos adicionales, más pequeños o con menos niveles en la respuesta, el BOF queda entre los puestos 2 y 5: compite, pero no hay evidencia de que el mecanismo se generalice como ventaja.</p>
+</section>
+<section id="limitaciones">
+<h2>Limitaciones<a class="headerlink" href="#limitaciones" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Datos.</strong> Un solo productor regional (Vinho Verde), vinos de 2004 a 2007 y una etiqueta subjetiva: la mediana de al menos tres catadores. El modelo aprende las preferencias de ese panel, no una calidad objetiva.</p></li>
+<li><p><strong>Lotes no identificados.</strong> No hay una variable de lote o de productor. La validación por bloques del archivo (<a class="reference internal" href="02_datos.html#sec-auditoria"><span class="std std-ref">Auditoría de fuga de información</span></a>) sugiere que los vinos vecinos comparten información, así que el AUC de todos los modelos puede ser algo optimista para lotes nuevos.</p></li>
+<li><p><strong>Dependencia entre bloques.</strong> Los 25 bloques comparten vinos. La <em>t</em> corregida lo tiene en cuenta, pero Wilcoxon, Friedman y Nemenyi suponen bloques independientes y se interpretan como aproximaciones.</p></li>
+<li><p><strong>Pocos conjuntos para generalizar.</strong> Con cinco conjuntos, la comparación entre conjuntos tiene poca potencia; Wilcoxon no puede bajar de p = 0.0625.</p></li>
+<li><p><strong>Alcance del mecanismo.</strong> El BOF solo tiene sentido cuando el evento es el corte de una respuesta ordinal o numérica; con una etiqueta binaria pura se reduce a un Extra-Trees.</p></li>
+<li><p><strong>Costo.</strong> La implementación está en numpy puro y es más lenta de entrenar que Random Forest de scikit-learn, que está escrito en C.</p></li>
+<li><p><strong>Medición del cómputo.</strong> Los tiempos se midieron con 11 procesos en paralelo en un equipo de escritorio, así que tienen ruido por la competencia entre procesos.</p></li>
+</ul>
+</section>
+<section id="riesgos-y-usos-inadecuados">
+<h2>Riesgos y usos inadecuados<a class="headerlink" href="#riesgos-y-usos-inadecuados" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Usar la probabilidad como certificación de calidad: el modelo reproduce las preferencias de un panel de catadores de una región y una época.</p></li>
+<li><p>Aplicarlo a vinos de otras regiones, uvas o años sin reentrenar: el estudio de cambio de distribución muestra cuánto se degrada entre tintos y blancos.</p></li>
+<li><p>Decisiones automáticas sin revisión humana: un falso negativo descarta un lote bueno y un falso positivo promueve uno mediocre.</p></li>
+<li><p>Los conjuntos adicionales de salud y educación se usaron solo para comparar algoritmos; el modelo no está validado para decisiones sobre personas.</p></li>
+</ul>
+</section>
+<section id="trabajo-futuro">
+<h2>Trabajo futuro<a class="headerlink" href="#trabajo-futuro" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Validar con datos que identifiquen el lote o el productor, usando pliegues agrupados.</p></li>
+<li><p>Probar el mecanismo con <em>gradient boosting</em>: una pérdida de Brier ponderada por el mismo núcleo sobre las probabilidades acumuladas, en lugar de árboles aleatorizados.</p></li>
+<li><p>Elegir los anchos de los núcleos con los casos fuera de bolsa durante el ajuste, sin búsqueda externa.</p></li>
+<li><p>Aprovechar la distribución predicha de la nota para decisiones con costos (por ejemplo, separar vinos de 8 o más para una línea premium) y para conjuntos conformes ordinales.</p></li>
+<li><p>Reescribir el crecimiento de los árboles con numba o Cython para acercar su costo al de Random Forest.</p></li>
+</ul>
+</section>
+<section id="declaracion-de-uso-de-herramientas-de-inteligencia-artificial">
+<h2>Declaración de uso de herramientas de inteligencia artificial<a class="headerlink" href="#declaracion-de-uso-de-herramientas-de-inteligencia-artificial" title="Link to this heading">#</a></h2>
+<p>En este entregable se usó <strong>Claude (Anthropic)</strong>, un asistente de inteligencia artificial, a través de Claude Code, para:</p>
+<ol class="arabic simple">
+<li><p>proponer, programar y probar el código del repositorio (el modelo original, los experimentos, las pruebas estadísticas, el dashboard y los scripts de apoyo);</p></li>
+<li><p>ejecutar los experimentos, las pruebas unitarias y la revisión bibliográfica por API;</p></li>
+<li><p>redactar los borradores de este libro, de la guía del código, del protocolo y de la documentación.</p></li>
+</ol>
+<p>Las decisiones de diseño del modelo original se tomaron a partir de experimentos piloto documentados (anexo A del protocolo y <code class="docutils literal notranslate"><span class="pre">experiments/bitacora_diseno.csv</span></code>), y todos los números del libro se calculan con el código del repositorio al compilarlo.</p>
+<p>La declaración de autoría, firmada por el equipo, está al final del capítulo 10.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="08_dashboard.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Dashboard y despliegue</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="10_reproducibilidad.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Reproducibilidad y bibliografía</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos">Hallazgos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#veredicto-sobre-r1-r2-y-r3">Veredicto sobre R1, R2 y R3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones">Limitaciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#riesgos-y-usos-inadecuados">Riesgos y usos inadecuados</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trabajo-futuro">Trabajo futuro</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaracion-de-uso-de-herramientas-de-inteligencia-artificial">Declaración de uso de herramientas de inteligencia artificial</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Roger Daza, Matteo Del Sole y Rafael Romero
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

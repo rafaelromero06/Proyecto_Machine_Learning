@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Dashboard y despliegue &#8212; Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=b4b7a797" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '08_dashboard';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Conclusiones y limitaciones" href="09_conclusiones.html" />
+    <link rel="prev" title="Evaluación ampliada y robustez" href="07_evaluacion_ampliada.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_correcciones.html">Trazabilidad de las correcciones del Entregable 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_datos.html">Datos: ETL, EDA y auditoría de fuga</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_benchmarks.html">Modelos benchmark y mejores combinaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_literatura.html">Revisión de literatura y novedad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_modelo_original.html">El modelo original: Bosque Ordinal Focalizado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_validacion.html">Protocolo y validación estadística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_evaluacion_ampliada.html">Evaluación ampliada y robustez</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Dashboard y despliegue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_conclusiones.html">Conclusiones y limitaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_reproducibilidad.html">Reproducibilidad y bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/rafaelromero06/Proyecto_Machine_Learning" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/08_dashboard.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Dashboard y despliegue</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arquitectura">Arquitectura</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#secciones">Secciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decisiones-de-diseno">Decisiones de diseño</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capturas">Capturas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#artefactos-y-ficha-del-modelo">Artefactos y ficha del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guia-de-despliegue">Guía de despliegue</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dashboard-y-despliegue">
+<h1>Dashboard y despliegue<a class="headerlink" href="#dashboard-y-despliegue" title="Link to this heading">#</a></h1>
+<p>El dashboard, llamado <strong>Cata Ciega</strong>, lleva los resultados a una aplicación web que una persona no experta puede usar para entender el problema, explorar los datos, predecir la calidad de un vino nuevo y decidir cuánto confiar en esa predicción. Se construyó con Dash, dash-bootstrap-components y Plotly, y se despliega en Render con gunicorn. Cada bloque está escrito como la pregunta de un usuario real («¿Qué distingue a un vino bueno?», «¿Será bueno este vino?», «¿Puedo confiar en él?», «¿La diferencia es real o es suerte?») y cada gráfica trae una frase de lectura que se recalcula con los datos.</p>
+<section id="arquitectura">
+<h2>Arquitectura<a class="headerlink" href="#arquitectura" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">py</span>                      <span class="n">crea</span> <span class="n">la</span> <span class="n">app</span> <span class="p">(</span><span class="n">use_pages</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">la</span> <span class="n">barra</span> <span class="n">de</span> <span class="n">navegación</span> <span class="n">fija</span><span class="p">,</span> <span class="n">el</span> <span class="n">telón</span> <span class="n">de</span> <span class="n">transición</span> <span class="n">y</span> <span class="n">expone</span> <span class="n">server</span>
+<span class="n">pages</span><span class="o">/</span><span class="n">contexto</span><span class="o">.</span><span class="n">py</span>           <span class="n">sección</span> <span class="mi">1</span><span class="p">:</span> <span class="n">problema</span><span class="p">,</span> <span class="n">pregunta</span><span class="p">,</span> <span class="n">datos</span><span class="p">,</span> <span class="n">tabla</span> <span class="n">periódica</span> <span class="n">de</span> <span class="n">variables</span><span class="p">,</span> <span class="n">metodología</span><span class="p">,</span> <span class="n">conclusión</span> <span class="n">y</span> <span class="n">límites</span>
+<span class="n">pages</span><span class="o">/</span><span class="n">eda</span><span class="o">.</span><span class="n">py</span>                <span class="n">sección</span> <span class="mi">2</span><span class="p">:</span> <span class="n">filtros</span> <span class="n">globales</span><span class="p">,</span> <span class="n">distribuciones</span><span class="p">,</span> <span class="n">huella</span> <span class="n">química</span><span class="p">,</span> <span class="n">correlaciones</span><span class="p">,</span> <span class="n">explorador</span> <span class="n">bivariado</span> <span class="n">y</span> <span class="n">atípicos</span>
+<span class="n">pages</span><span class="o">/</span><span class="n">modelos</span><span class="o">.</span><span class="n">py</span>            <span class="n">sección</span> <span class="mi">3</span><span class="p">:</span> <span class="n">pestañas</span> <span class="n">de</span> <span class="n">líderes</span><span class="p">,</span> <span class="n">predicción</span><span class="p">,</span> <span class="n">diagnóstico</span><span class="p">,</span> <span class="n">comparación</span> <span class="n">y</span> <span class="n">modelo</span> <span class="n">original</span><span class="p">,</span> <span class="n">y</span> <span class="n">sus</span> <span class="n">callbacks</span>
+<span class="n">pages</span><span class="o">/</span><span class="n">cata</span><span class="o">.</span><span class="n">py</span>               <span class="n">juego</span> <span class="n">de</span> <span class="n">cata</span> <span class="n">a</span> <span class="n">ciegas</span> <span class="n">que</span> <span class="n">enseña</span> <span class="n">qué</span> <span class="n">mide</span> <span class="n">el</span> <span class="n">AUC</span>
+<span class="n">pages</span><span class="o">/</span><span class="n">ficha</span><span class="o">.</span><span class="n">py</span>              <span class="n">ficha</span> <span class="k">del</span> <span class="n">modelo</span> <span class="n">y</span> <span class="n">declaración</span> <span class="n">de</span> <span class="n">los</span> <span class="n">datos</span>
+<span class="n">src</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">py</span>                 <span class="n">carga</span> <span class="n">única</span> <span class="n">de</span> <span class="n">datos</span><span class="p">,</span> <span class="n">esquema</span> <span class="n">de</span> <span class="n">entrada</span><span class="p">,</span> <span class="n">caché</span> <span class="n">de</span> <span class="n">tablas</span> <span class="n">y</span> <span class="n">un</span> <span class="n">solo</span> <span class="n">modelo</span> <span class="n">en</span> <span class="n">memoria</span>
+<span class="n">src</span><span class="o">/</span><span class="n">plots</span><span class="o">.</span><span class="n">py</span>                <span class="n">funciones</span> <span class="n">de</span> <span class="n">graficación</span> <span class="n">reutilizables</span> <span class="n">y</span> <span class="n">plantilla</span> <span class="n">Plotly</span> <span class="n">común</span>
+<span class="n">src</span><span class="o">/</span><span class="n">prediccion</span><span class="o">.</span><span class="n">py</span>           <span class="n">validación</span> <span class="n">de</span> <span class="n">entradas</span><span class="p">,</span> <span class="n">predicción</span><span class="p">,</span> <span class="n">vinos</span> <span class="n">gemelos</span><span class="p">,</span> <span class="n">palancas</span> <span class="n">y</span> <span class="n">evaluación</span> <span class="n">de</span> <span class="n">lotes</span>
+<span class="n">src</span><span class="o">/</span><span class="n">explicaciones</span><span class="o">.</span><span class="n">py</span>        <span class="n">explicaciones</span> <span class="n">SHAP</span> <span class="n">de</span> <span class="n">cada</span> <span class="n">modelo</span> <span class="n">final</span>
+<span class="n">src</span><span class="o">/</span><span class="n">tablero</span><span class="o">.</span><span class="n">py</span>              <span class="n">piezas</span> <span class="n">comunes</span><span class="p">:</span> <span class="n">encabezados</span><span class="p">,</span> <span class="n">tarjetas</span><span class="p">,</span> <span class="n">lecturas</span><span class="p">,</span> <span class="n">cifras</span><span class="p">,</span> <span class="n">glosario</span> <span class="n">y</span> <span class="n">avisos</span> <span class="n">de</span> <span class="n">resultados</span> <span class="n">pendientes</span>
+<span class="n">src</span><span class="o">/</span><span class="n">tablero_modelos</span><span class="o">.</span><span class="n">py</span>      <span class="n">contenido</span> <span class="n">de</span> <span class="n">las</span> <span class="n">pestañas</span> <span class="n">de</span> <span class="n">Modelos</span>
+<span class="n">src</span><span class="o">/</span><span class="n">tablero_original</span><span class="o">.</span><span class="n">py</span>     <span class="n">contenido</span> <span class="n">de</span> <span class="n">la</span> <span class="n">pestaña</span> <span class="k">del</span> <span class="n">modelo</span> <span class="n">original</span>
+<span class="n">assets</span><span class="o">/</span><span class="n">estilos</span><span class="o">.</span><span class="n">css</span>          <span class="n">identidad</span> <span class="n">visual</span><span class="p">,</span> <span class="n">rejilla</span><span class="p">,</span> <span class="n">animaciones</span> <span class="n">y</span> <span class="n">adaptación</span> <span class="n">a</span> <span class="n">pantallas</span> <span class="n">pequeñas</span>
+<span class="n">assets</span><span class="o">/</span><span class="n">cata</span><span class="o">.</span><span class="n">js</span>              <span class="n">copa</span> <span class="n">animada</span><span class="p">,</span> <span class="n">telón</span> <span class="n">de</span> <span class="n">azulejos</span><span class="p">,</span> <span class="n">cava</span><span class="p">,</span> <span class="n">mosaico</span> <span class="n">de</span> <span class="n">decisión</span><span class="p">,</span> <span class="n">núcleo</span> <span class="n">y</span> <span class="n">juego</span> <span class="p">(</span><span class="n">callbacks</span> <span class="k">del</span> <span class="n">lado</span> <span class="k">del</span> <span class="n">cliente</span><span class="p">)</span>
+<span class="n">assets</span><span class="o">/</span><span class="n">azulejos</span><span class="o">/</span><span class="n">roseta</span><span class="o">.</span><span class="n">svg</span>  <span class="n">azulejo</span> <span class="n">usado</span> <span class="n">como</span> <span class="n">patrón</span> <span class="n">en</span> <span class="n">todo</span> <span class="n">el</span> <span class="n">tablero</span>
+<span class="n">artifacts</span><span class="o">/</span>                  <span class="n">modelos</span> <span class="n">finales</span> <span class="n">serializados</span> <span class="n">con</span> <span class="n">metadata</span><span class="o">.</span><span class="n">json</span>
+<span class="n">data</span><span class="o">/</span><span class="n">app</span><span class="o">/</span>                   <span class="n">resultados</span> <span class="n">precalculados</span> <span class="p">(</span><span class="n">tablas</span><span class="p">,</span> <span class="n">predicciones</span> <span class="n">fuera</span> <span class="n">de</span> <span class="n">muestra</span><span class="p">,</span> <span class="n">SHAP</span> <span class="k">global</span><span class="p">,</span> <span class="n">umbrales</span> <span class="n">conformes</span><span class="p">,</span> <span class="n">juego</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>La interfaz (páginas y <code class="docutils literal notranslate"><span class="pre">assets/</span></code>), la lógica de datos (<code class="docutils literal notranslate"><span class="pre">src/</span></code>) y los artefactos (<code class="docutils literal notranslate"><span class="pre">artifacts/</span></code>, <code class="docutils literal notranslate"><span class="pre">data/app/</span></code>) están separados. El servidor <strong>nunca entrena ni optimiza modelos</strong>: carga cada artefacto serializado cuando se usa y mantiene en memoria solo uno a la vez (libera el anterior antes de cargar el siguiente); las tablas se guardan con <code class="docutils literal notranslate"><span class="pre">functools.lru_cache</span></code>; todo lo demás (curvas, pruebas, SHAP global, robustez, datos del juego) se precalcula con <code class="docutils literal notranslate"><span class="pre">experiments/preparar_app.py</span></code>. Lo que todavía no se ha calculado se muestra como «resultado en preparación», nunca con cifras simuladas.</p>
+</section>
+<section id="secciones">
+<h2>Secciones<a class="headerlink" href="#secciones" title="Link to this heading">#</a></h2>
+<p><strong>Contexto.</strong> Una portada con una copa animada llena hasta la proporción real de vinos buenos (19 %); por qué importa, con una cifra citada (la producción mundial de vino de 2023, la más baja desde 1961, OIV 2024); la pregunta de investigación y los objetivos; la fuente, el periodo, la licencia, el tamaño y el tipo de tarea; una «tabla periódica» con las 12 variables, que muestra al voltear cada baldosa qué mide la variable y su correlación con la nota; la metodología como una ruta de nueve estaciones agrupadas por entrega; la conclusión principal con el veredicto; limitaciones, ética, autores, versión y referencias.</p>
+<p><strong>EDA.</strong> Una fila fija de filtros globales (tipo de vino, rango de nota y rango de alcohol) actualiza todas las gráficas mediante <em>callbacks</em>: cifras clave, la distribución de la nota con las dos clases, la «huella química» (cuántas desviaciones estándar se separan los vinos buenos en cada variable), el mural de correlaciones, la distribución y los atípicos de la variable elegida, un explorador bivariado con selección de ejes y color, la misma pareja animada nota por nota y una tabla de valores faltantes y atípicos.</p>
+<p><strong>Modelos.</strong> Cinco pestañas, accesibles también por enlace directo (<code class="docutils literal notranslate"><span class="pre">/modelos?pestana=…</span></code>):</p>
+<ol class="arabic simple">
+<li><p><em>Tabla de líderes</em>: una cava de diez botellas que se llenan según la métrica elegida (AUC, PR-AUC o Brier) y se reordenan con animación; la <code class="docutils literal notranslate"><span class="pre">dash_table.DataTable</span></code> ordenable y filtrable con la mejor combinación de cada modelo, el AUC medio ± desviación estándar en las 25 particiones, el intervalo bootstrap, PR-AUC, Brier, F1, el tiempo de inferencia y el tamaño del artefacto; el costo frente a la exactitud; y el mural del torneo de 136 combinaciones del Entregable 2.</p></li>
+<li><p><em>Predicción en vivo</em>: una ficha de laboratorio generada a partir del esquema de variables, con un deslizador por variable sobre la silueta de su distribución en vinos buenos y no buenos, un campo numérico validado, selector de modelo y botones para cargar un vino real bueno, uno no bueno, uno al azar o los valores medianos. La salida muestra una copa que se llena con la probabilidad, la clase, el <strong>conjunto conforme al 90 %</strong> con su cobertura, la <strong>explicación local SHAP</strong> como una balanza de aportes, las notas de los cinco vinos reales más parecidos, los cambios de una sola variable que más subirían la probabilidad y, con el modelo original, la distribución predicha de la nota. Un lote completo se puede evaluar subiendo un CSV y descargar ordenado.</p></li>
+<li><p><em>Diagnóstico</em>: un mosaico de 100 vinos, la matriz de confusión, la precisión, la sensibilidad y el F1 que cambian al mover el umbral; un umbral sugerido según el costo relativo de perder un vino bueno; curvas ROC y de precisión–sensibilidad con el umbral marcado; curva de calibración e importancia SHAP global del modelo elegido, todo con las predicciones fuera de muestra de la validación.</p></li>
+<li><p><em>Comparación estadística</em>: diagrama de diferencia crítica de Nemenyi con el modelo original incluido, el AUC de cada bloque, el duelo bloque por bloque frente al rival elegido, los cuatro jueces de la regla de superioridad con su p-valor ajustado, la prueba bayesiana y las tablas de pruebas.</p></li>
+<li><p><em>Modelo original</em>: veredicto explícito de superioridad según la regla pre-registrada, la limitación que resuelve, un explorador interactivo del núcleo que reparte el peso entre umbrales, el funcionamiento en cuatro pasos y el pseudocódigo, la evidencia de novedad, los conjuntos adicionales, las pruebas frente a cada rival, la ablación, la curva de convergencia, la sensibilidad y el resumen de robustez.</p></li>
+</ol>
+<p><strong>Cata a ciegas.</strong> En cada ronda aparecen dos vinos reales, uno bueno y uno no bueno, con su química enfrentada; el usuario elige el bueno y luego ve qué eligió el modelo original y la nota real. Elegir el mejor de dos vinos es exactamente lo que mide el AUC, así que el juego explica la métrica principal sin fórmulas. Las probabilidades vienen de modelos que no vieron esos vinos.</p>
+<p><strong>Ficha del modelo.</strong> Muestra <code class="docutils literal notranslate"><span class="pre">MODEL_CARD.md</span></code> y <code class="docutils literal notranslate"><span class="pre">data/DATA_STATEMENT.md</span></code> dentro de la aplicación.</p>
+</section>
+<section id="decisiones-de-diseno">
+<h2>Decisiones de diseño<a class="headerlink" href="#decisiones-de-diseno" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Identidad.</strong> Vinho Verde es una denominación del norte de Portugal, así que el tablero usa como motivo el azulejo portugués: un mismo azulejo dibujado en SVG sirve de patrón de fondo, de friso, de logotipo y de telón animado entre páginas. Los datos también se presentan como baldosas (la tabla periódica, el mural de correlaciones, el mosaico de 100 vinos y el duelo de 25 bloques).</p></li>
+<li><p><strong>Paleta limitada a cinco colores.</strong> Cobalto para la clase «bueno» y para el modelo original; ocre para la clase «no bueno», el rival y las alertas; vino y verde solo para distinguir tintos y blancos; y una tinta azul oscura con sus grises para el texto. Los pares cobalto–ocre y vino–verde se validaron contra daltonismo (protanopía y deuteranopía) y contraste; como ocre y verde se confunden con daltonismo, nunca aparecen juntos en una gráfica. Las correlaciones usan una escala divergente ocre–crema–cobalto con el neutro en cero.</p></li>
+<li><p><strong>Una idea por gráfica.</strong> En las comparaciones se resalta el modelo original y el resto queda en gris, en lugar de usar diez colores.</p></li>
+<li><p><strong>Lectura y glosario.</strong> Toda gráfica tiene título, ejes con unidades, leyenda cuando hay dos o más series, información al pasar el cursor y una frase de interpretación. Los términos técnicos (AUC, SHAP, conjunto conforme, Nemenyi, Holm…) muestran su definición en lenguaje sencillo al pasar el cursor o al enfocarlos con el teclado.</p></li>
+<li><p><strong>Animación con propósito.</strong> La copa se llena con la probabilidad y el líquido se agita cuando cambia; la cava se reordena al cambiar de métrica; las baldosas se voltean al aparecer o al filtrar. Las animaciones se apagan si el sistema pide reducir el movimiento.</p></li>
+<li><p><strong>Robustez.</strong> El formulario valida tipos y rangos, y los errores se muestran con <code class="docutils literal notranslate"><span class="pre">dbc.Alert</span></code> (por ejemplo, «Alcohol: 30 está fuera del rango válido (7.31 a 15.59 % vol.)»). Un archivo de lote con columnas faltantes o filas inválidas se informa fila por fila, y cualquier excepción del cálculo se informa sin detener la aplicación.</p></li>
+<li><p><strong>Lenguaje para no expertos.</strong> Cada recuadro de lectura abre con la conclusión en una frase sencilla y deja después las cifras; las gráficas poco comunes (diagrama de diferencia crítica, curva ROC, calibración) llevan una línea «Cómo leerla». El botón «Glosario» de la barra abre un panel con una guía rápida y 47 definiciones con buscador, y tocar cualquier término subrayado lo abre en su definición. Las métricas se traducen a hechos contables: un AUC de 0.865 se muestra como «86 de cada 100 parejas de vinos bien ordenadas» y la matriz de confusión, como lo que pasa con 100 vinos.</p></li>
+<li><p><strong>Preguntas para adivinar.</strong> Antes de los resultados clave (la conclusión, la medición que más separa a los vinos buenos, el tipo de modelo que gana, cuántos vinos buenos encuentra el modelo y si la ventaja es real) la página plantea una pregunta de opción múltiple; al responder se revela la respuesta con su explicación. Las respuestas correctas se calculan con los datos, y una barra de progreso de lectura en el borde superior indica cuánto falta de cada página.</p></li>
+<li><p><strong>Recorrido guiado.</strong> Las cinco páginas forman una ruta numerada que aparece al final de cada una con el paso siguiente; las pestañas de Modelos están numeradas, cada una termina con un botón hacia la siguiente y la pestaña activa queda en la URL. El juego ofrece pistas opcionales con lo que el EDA encontró sobre los vinos buenos.</p></li>
+<li><p><strong>Rendimiento y memoria.</strong> Las pestañas se renderizan solo cuando se abren. La cava, el mosaico de decisión, el núcleo y el juego corren en el navegador con <em>callbacks</em> del lado del cliente, sin ir al servidor. El plan gratuito de Render tiene 512 MB de memoria, así que solo el último modelo usado queda en memoria y las explicaciones SHAP no se guardan entre consultas. En los bosques (el modelo original y Random Forest), el SHAP exacto se calcula por bloques de 25 árboles: por linealidad, el del bosque es la suma del de sus bloques. SVM, KNN y Naive Bayes usan valores de Shapley por permutaciones antitéticas programados con numpy. En un contenedor Linux con los mismos límites del plan gratuito (512 MB y 0.1 CPU), el pico de memoria tras pedir una predicción explicada a cada uno de los 10 modelos fue de 460 MB; la explicación más lenta (la del modelo original) tardó unos 8 s, y <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> usa la versión de XGBoost sin GPU (<code class="docutils literal notranslate"><span class="pre">xgboost-cpu</span></code>, la misma 3.4.1), cuya rueda para Linux pesa 5.5 MB en lugar de 55 MB.</p></li>
+<li><p><strong>Responsividad.</strong> La rejilla <code class="docutils literal notranslate"><span class="pre">dbc.Row</span></code>/<code class="docutils literal notranslate"><span class="pre">dbc.Col</span></code> reorganiza el contenido en tablet y teléfono; la barra de navegación se colapsa en un menú y el juego pasa a dos columnas con la comparación debajo.</p></li>
+<li><p><strong>Accesibilidad.</strong> Contraste suficiente, etiquetas en todos los controles, enlace para saltar al contenido, foco visible y textos alternativos en las copas y los mosaicos. La información nunca depende solo del color: la clase va escrita, las baldosas del mosaico llevan un símbolo (✓, ○, !) y los sellos de los jueces dicen su veredicto.</p></li>
+</ul>
+</section>
+<section id="capturas">
+<h2>Capturas<a class="headerlink" href="#capturas" title="Link to this heading">#</a></h2>
+<figure class="align-default" id="fig-cap-contexto">
+<a class="reference internal image-reference" href="_images/contexto.png"><img alt="_images/contexto.png" src="_images/contexto.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figura 23 </span><span class="caption-text">Sección Contexto: la portada con la copa llena hasta la proporción de vinos buenos.</span><a class="headerlink" href="#fig-cap-contexto" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig-cap-eda">
+<a class="reference internal image-reference" href="_images/eda.png"><img alt="_images/eda.png" src="_images/eda.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figura 24 </span><span class="caption-text">Sección EDA con los filtros globales.</span><a class="headerlink" href="#fig-cap-eda" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig-cap-prediccion">
+<a class="reference internal image-reference" href="_images/prediccion.png"><img alt="_images/prediccion.png" src="_images/prediccion.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figura 25 </span><span class="caption-text">Predicción en vivo con el modelo original: copa con la probabilidad, conjunto conforme, explicación SHAP local, vinos gemelos y palancas.</span><a class="headerlink" href="#fig-cap-prediccion" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig-cap-original">
+<a class="reference internal image-reference" href="_images/original.png"><img alt="_images/original.png" src="_images/original.png" style="width: 95%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Figura 26 </span><span class="caption-text">Pestaña del modelo original con el veredicto de superioridad.</span><a class="headerlink" href="#fig-cap-original" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="artefactos-y-ficha-del-modelo">
+<h2>Artefactos y ficha del modelo<a class="headerlink" href="#artefactos-y-ficha-del-modelo" title="Link to this heading">#</a></h2>
+<p>Cada modelo final está en <code class="docutils literal notranslate"><span class="pre">artifacts/&lt;modelo&gt;/</span></code> con <code class="docutils literal notranslate"><span class="pre">modelo.joblib</span></code> (comprimido con <code class="docutils literal notranslate"><span class="pre">joblib.dump(...,</span> <span class="pre">compress=3)</span></code>), <code class="docutils literal notranslate"><span class="pre">metadata.json</span></code> (versiones de las librerías, semilla, hiperparámetros finales, esquema de entrada con rangos válidos, métricas del bucle externo, tamaño, huella SHA-256 y resultado de la prueba de ida y vuelta) y <code class="docutils literal notranslate"><span class="pre">prediccion_referencia.csv</span></code> (predicciones de 200 vinos fijos). La ficha del modelo original (<code class="docutils literal notranslate"><span class="pre">MODEL_CARD.md</span></code>) sigue a <span class="bibtex-citation" id="id1">Mitchell <em>et al.</em> [<a class="reference internal" href="10_reproducibilidad.html#id29" title="Margaret Mitchell, Simone Wu, Andrew Zaldivar, Parker Barnes, Lucy Vasserman, Ben Hutchinson, Elena Spitzer, Inioluwa Deborah Raji, and Timnit Gebru. Model cards for model reporting. In Proceedings of the Conference on Fairness, Accountability, and Transparency, FAT* ’19, 220–229. ACM, 2019. URL: http://dx.doi.org/10.1145/3287560.3287596, doi:10.1145/3287560.3287596.">2019</a>]</span> y la declaración de los datos a <span class="bibtex-citation" id="id2">Bender and Friedman [<a class="reference internal" href="10_reproducibilidad.html#id30" title="Emily M. Bender and Batya Friedman. Data statements for natural language processing: toward mitigating system bias and enabling better science. Transactions of the Association for Computational Linguistics, 6:587–604, 2018. URL: http://dx.doi.org/10.1162/tacl_a_00041, doi:10.1162/tacl_a_00041.">2018</a>]</span>.</p>
+</section>
+<section id="guia-de-despliegue">
+<h2>Guía de despliegue<a class="headerlink" href="#guia-de-despliegue" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Verificar en local: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">app.py</span></code> abre la aplicación en http://127.0.0.1:8050 y <code class="docutils literal notranslate"><span class="pre">app.server</span></code> queda expuesto para gunicorn.</p></li>
+<li><p>Fijar el entorno: <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> tiene versiones exactas (incluido <code class="docutils literal notranslate"><span class="pre">gunicorn</span></code>) y <code class="docutils literal notranslate"><span class="pre">.python-version</span></code> fija Python 3.12.14.</p></li>
+<li><p>Subir el repositorio a GitHub.</p></li>
+<li><p>En Render, crear un <em>Blueprint</em> con el <code class="docutils literal notranslate"><span class="pre">render.yaml</span></code> de la raíz (o un <em>Web Service</em> con carpeta raíz <code class="docutils literal notranslate"><span class="pre">entregable3</span></code>, <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> como comando de construcción y <code class="docutils literal notranslate"><span class="pre">gunicorn</span> <span class="pre">app:server</span> <span class="pre">--workers</span> <span class="pre">1</span> <span class="pre">--threads</span> <span class="pre">4</span> <span class="pre">--timeout</span> <span class="pre">120</span></code> como comando de inicio).</p></li>
+<li><p>Revisar los registros de construcción y probar todas las páginas y <em>callbacks</em> en la URL pública. En el plan gratuito el servicio se suspende sin tráfico y la primera visita tarda; se usa un solo proceso de gunicorn para no superar la memoria disponible.</p></li>
+</ol>
+<p>El dashboard está publicado en https://calidad-vino-ml-24mf.onrender.com/</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_evaluacion_ampliada.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Evaluación ampliada y robustez</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09_conclusiones.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Conclusiones y limitaciones</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arquitectura">Arquitectura</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#secciones">Secciones</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decisiones-de-diseno">Decisiones de diseño</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#capturas">Capturas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#artefactos-y-ficha-del-modelo">Artefactos y ficha del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guia-de-despliegue">Guía de despliegue</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Roger Daza, Matteo Del Sole y Rafael Romero
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

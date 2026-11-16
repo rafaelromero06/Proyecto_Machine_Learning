@@ -19,4 +19,4 @@ Universidad del Norte. Autores: Roger Daza, Matteo Del Sole y Rafael Romero.
 | Entregable 2 | 136 combinaciones de modelos, balanceo y optimizadores con validación anidada 5 × 3, comparación estadística, calibración, interpretabilidad y costo | `modelado_entregable2/modelado/` |
 | Entregable 3 | Dashboard en Dash, modelo original (Bosque Ordinal Focalizado), protocolo pre-registrado, evaluación ampliada e informe en Jupyter Book | `entregable3/` (ver su `README.md`) |
 
-Dashboard publicado: https://calidad-vino-ml-24mf.onrender.com/ (despliegue con `render.yaml`). Integración continua: `.github/workflows/pruebas.yml`.
+Informe del Entregable 3 publicado: https://rafaelromero06.github.io/Proyecto_Machine_Learning/entregable3/libro/intro.html. Dashboard publicado: https://calidad-vino-ml-24mf.onrender.com/ (despliegue con `render.yaml`). Integración continua: `.github/workflows/pruebas.yml`.

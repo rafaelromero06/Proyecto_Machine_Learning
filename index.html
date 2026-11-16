@@ -92,6 +92,12 @@
   ul.findings li { margin-bottom: 8px; font-size: 15px; }
 
   .contenido { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 6px; padding: 16px 22px; margin: 0 0 10px; }
+  .e3 { border: 1px solid var(--text); border-left: 6px solid var(--text); border-radius: 6px; padding: 16px 22px; margin: 0 0 14px; }
+  .e3 .rotulo { font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-soft); font-weight: 600; }
+  .e3 p { margin: 6px 0 10px; }
+  .e3 .enlaces { display: flex; gap: 12px; flex-wrap: wrap; }
+  .e3 .enlaces a { background: var(--text); color: #fff; text-decoration: none; padding: 7px 14px; border-radius: 4px; font-size: 14.5px; font-weight: 600; }
+  .e3 .enlaces a:hover, .e3 .enlaces a:focus { background: var(--text-soft); }
   .contenido h3 { margin: 0 0 8px; }
   .contenido ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; font-size: 14.5px; }
   .contenido li { margin-bottom: 3px; break-inside: avoid; }
@@ -119,6 +125,15 @@
 </header>
 
 <div class="wrap">
+
+<div class="e3">
+  <div class="rotulo">Entregable 3</div>
+  <p>Dashboard predictivo, modelo original (Bosque Ordinal Focalizado), protocolo pre-registrado, pruebas de hipótesis y evaluación ampliada.</p>
+  <div class="enlaces">
+    <a href="entregable3/libro/intro.html">Informe del Entregable 3 (Jupyter Book)</a>
+    <a href="https://calidad-vino-ml-24mf.onrender.com/">Dashboard en vivo</a>
+  </div>
+</div>
 
 <div class="contenido"><h3>Contenido</h3><ol><li><a href="#s01">Visión general del dataset</a></li><li><a href="#s02">Datos faltantes</a></li><li><a href="#s03">Filas duplicadas</a></li><li><a href="#s04">Estadísticas descriptivas</a></li><li><a href="#s05">Distribuciones</a></li><li><a href="#s06">Valores atípicos</a></li><li><a href="#s07">Correlaciones</a></li><li><a href="#s08">Tinto vs. blanco</a></li><li><a href="#s09">Calidad por tipo de vino</a></li><li><a href="#s10">Variables más relacionadas con calidad</a></li><li><a href="#s11">Conclusiones del EDA</a></li><li><a href="#s12">Primer modelado (entrega 1)</a></li><li><a href="#s13">Diseño del experimento</a></li><li><a href="#s14">Clasificación: qué modelo es mejor</a></li><li><a href="#s15">¿Sirve balancear las clases?</a></li><li><a href="#s16">Regresión</a></li><li><a href="#s17">Comparación de optimizadores</a></li><li><a href="#s18">¿Son confiables los resultados?</a></li><li><a href="#s19">Configuración final</a></li><li><a href="#s20">Evaluación detallada</a></li><li><a href="#s21">Calibración de las probabilidades</a></li><li><a href="#s22">Análisis de residuos</a></li><li><a href="#s23">DeLong, Diebold–Mariano, MCS y tamaños de efecto</a></li><li><a href="#s24">Interpretabilidad: SHAP y LIME</a></li><li><a href="#s25">Costo computacional</a></li><li><a href="#s26">Tabla maestra</a></li><li><a href="#s27">Reproducibilidad</a></li><li><a href="#s28">Conclusiones</a></li></ol></div>
 <div class="entrega">Entrega 1 · Análisis exploratorio</div>

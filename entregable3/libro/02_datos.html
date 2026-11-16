@@ -1,0 +1,1094 @@
+
+<!DOCTYPE html>
+
+
+<html lang="es" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Datos: ETL, EDA y auditoría de fuga &#8212; Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css?v=b4b7a797" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=78d55cf8"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Haz clic para mostrar';</script>
+    <script>let toggleHintHide = 'Haz clic para ocultar';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/translations.js?v=d190bf04"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '02_datos';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Modelos benchmark y mejores combinaciones" href="03_benchmarks.html" />
+    <link rel="prev" title="Trazabilidad de las correcciones del Entregable 2" href="01_correcciones.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="es"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Saltar al contenido principal</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Volver arriba</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Advertencia de versión"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Navegación del sitio">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="En esta página">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Búsqueda</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_correcciones.html">Trazabilidad de las correcciones del Entregable 2</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Datos: ETL, EDA y auditoría de fuga</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_benchmarks.html">Modelos benchmark y mejores combinaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_literatura.html">Revisión de literatura y novedad</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_modelo_original.html">El modelo original: Bosque Ordinal Focalizado</a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_validacion.html">Protocolo y validación estadística</a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_evaluacion_ampliada.html">Evaluación ampliada y robustez</a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_dashboard.html">Dashboard y despliegue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_conclusiones.html">Conclusiones y limitaciones</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_reproducibilidad.html">Reproducibilidad y bibliografía</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/rafaelromero06/Proyecto_Machine_Learning" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Repositorio de origen"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Descarga esta pagina">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/02_datos.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Descargar archivo fuente"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Imprimir en PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Modo de pantalla completa"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Tema" data-bs-title="Tema"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Claro"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Oscuro"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="Sistema"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Búsqueda" aria-label="Búsqueda" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Datos: ETL, EDA y auditoría de fuga</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contenido </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etl">ETL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaracion-de-los-datos">Declaración de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conjunto-principal-wine-quality">Conjunto principal: Wine Quality</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgos-y-limitaciones-conocidos">Sesgos y limitaciones conocidos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usos-inadecuados">Usos inadecuados</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conjuntos-adicionales-solo-para-la-evaluacion-del-modelo-original">Conjuntos adicionales (solo para la evaluación del modelo original)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#auditoria-de-fuga-de-informacion">Auditoría de fuga de información</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="datos-etl-eda-y-auditoria-de-fuga">
+<h1>Datos: ETL, EDA y auditoría de fuga<a class="headerlink" href="#datos-etl-eda-y-auditoria-de-fuga" title="Link to this heading">#</a></h1>
+<section id="etl">
+<h2>ETL<a class="headerlink" href="#etl" title="Link to this heading">#</a></h2>
+<p>Los archivos <code class="docutils literal notranslate"><span class="pre">winequality-red.csv</span></code> (1599 tintos) y <code class="docutils literal notranslate"><span class="pre">winequality-white.csv</span></code> (4898 blancos) se unen con una variable <code class="docutils literal notranslate"><span class="pre">tipo_vino</span></code>. De las 6497 filas, 1177 son duplicados exactos (misma química, mismo tipo y misma nota); se eliminan <strong>antes</strong> de partir los datos, porque un duplicado en entrenamiento y en prueba mide memoria y no generalización. Quedan 5320 vinos sin valores faltantes. La variable objetivo es el evento <code class="docutils literal notranslate"><span class="pre">quality</span> <span class="pre">&gt;=</span> <span class="pre">7</span></code>.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">prev</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"tipo_vino"</span><span class="p">)[</span><span class="s2">"quality"</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">q</span><span class="p">:</span> <span class="p">(</span><span class="n">q</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"prev_total"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">bueno</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"prev_tinto"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">prev</span><span class="p">[</span><span class="s1">'red'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"prev_blanco"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">prev</span><span class="p">[</span><span class="s1">'white'</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ejes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">),</span> <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s2">"width_ratios"</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]})</span>
+<span class="n">conteo</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"quality"</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">conteo</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span> <span class="n">conteo</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="n">AZUL</span> <span class="k">if</span> <span class="n">q</span> <span class="o">&gt;=</span> <span class="mi">7</span> <span class="k">else</span> <span class="n">NARANJA</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">conteo</span><span class="o">.</span><span class="n">index</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Nota de calidad"</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Número de vinos"</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"La nota se concentra en 5 y 6"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">conteo</span><span class="p">)),</span> <span class="n">conteo</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="mi">30</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">TINTA_2</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">([</span><span class="s2">"Tinto"</span><span class="p">,</span> <span class="s2">"Blanco"</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span> <span class="o">*</span> <span class="n">prev</span><span class="p">[</span><span class="s2">"red"</span><span class="p">],</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">prev</span><span class="p">[</span><span class="s2">"white"</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="n">AZUL</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"</span><span class="si">% d</span><span class="s2">e vinos buenos"</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Prevalencia por tipo"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">100</span> <span class="o">*</span> <span class="n">prev</span><span class="p">[</span><span class="s2">"red"</span><span class="p">],</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">prev</span><span class="p">[</span><span class="s2">"white"</span><span class="p">]]):</span>
+    <span class="n">ejes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> %"</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">TINTA_2</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="p">[</span><span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">AZUL</span><span class="p">),</span> <span class="n">plt</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">NARANJA</span><span class="p">)],</span>
+               <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">"Bueno (≥ 7)"</span><span class="p">,</span> <span class="s2">"No bueno (≤ 6)"</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s2">"upper right"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"fig_objetivo"</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<figure class="align-default" id="fig-objetivo">
+<img alt="_images/91ef99b74df0065485eac86542344ec2d471eec6a61329c0d172bc3b1fb443d3.png" src="_images/91ef99b74df0065485eac86542344ec2d471eec6a61329c0d172bc3b1fb443d3.png" />
+<figcaption>
+<p><span class="caption-number">Figura 10 </span><span class="caption-text">Distribución de la nota y prevalencia del evento por tipo de vino (5320 vinos sin duplicados).</span><a class="headerlink" href="#fig-objetivo" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>El <span class="pasted-text">19.0</span> % de los vinos es bueno (<a class="reference internal" href="#fig-objetivo"><span class="std std-numref">Figura 10</span></a>): la clase de interés es minoritaria, lo que justifica estudiar el balanceo y medir con AUC y PR-AUC además de exactitud. Los blancos tienen más vinos buenos (<span class="pasted-text">20.8</span> %) que los tintos (<span class="pasted-text">13.5</span> %), por lo que el tipo entra como variable.</p>
+</section>
+<section id="eda">
+<h2>EDA<a class="headerlink" href="#eda" title="Link to this heading">#</a></h2>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">aucs</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">auc_mann_whitney</span><span class="p">(</span><span class="n">bueno</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">NUMERICAS_VINO</span><span class="p">}</span>
+<span class="n">separacion</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="n">c</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">aucs</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">top</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">separacion</span><span class="o">.</span><span class="n">index</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ejes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">5.6</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ejes</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">top</span><span class="p">):</span>
+    <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.005</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">])</span>
+    <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">bueno</span><span class="p">,</span> <span class="n">c</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">NARANJA</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"No bueno"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">bueno</span><span class="p">,</span> <span class="n">c</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">AZUL</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Bueno"</span><span class="p">)</span>
+    <span class="n">nombre</span><span class="p">,</span> <span class="n">unidad</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">DICCIONARIO_VINO</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">unidad</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Densidad"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2">: AUC de la variable sola = </span><span class="si">{</span><span class="n">separacion</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">ejes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"fig_variables"</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"auc_alcohol"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">separacion</span><span class="p">[</span><span class="s1">'alcohol'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"var2"</span><span class="p">,</span> <span class="n">DICCIONARIO_VINO</span><span class="p">[</span><span class="n">top</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<figure class="align-default" id="fig-variables">
+<img alt="_images/bde1e72a1110ffb2e14b99ddb9491a115084606da251b0ea0b02048dfd93ef89.png" src="_images/bde1e72a1110ffb2e14b99ddb9491a115084606da251b0ea0b02048dfd93ef89.png" />
+<figcaption>
+<p><span class="caption-number">Figura 11 </span><span class="caption-text">Distribución por clase de las cuatro variables que mejor separan los vinos buenos (AUC de cada variable usada sola como puntaje).</span><a class="headerlink" href="#fig-variables" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>El alcohol es la variable que más separa las clases (AUC <span class="pasted-text">0.79</span> usada sola), seguida de <span class="pasted-text">densidad</span>. Las distribuciones se superponen bastante en todas las variables (<a class="reference internal" href="#fig-variables"><span class="std std-numref">Figura 11</span></a>): ninguna basta por sí sola y los modelos deben combinar varias.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">NUMERICAS_VINO</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"quality"</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">nombres</span> <span class="o">=</span> <span class="p">[</span><span class="n">DICCIONARIO_VINO</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">NUMERICAS_VINO</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"Nota"</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">corr</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span><span class="s2">"d"</span><span class="p">,</span> <span class="p">[</span><span class="n">AZUL</span><span class="p">,</span> <span class="s2">"#f0efec"</span><span class="p">,</span> <span class="s2">"#e34948"</span><span class="p">]),</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)),</span> <span class="n">nombres</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"right"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)),</span> <span class="n">nombres</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nombres</span><span class="p">)):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">corr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"r de Pearson"</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Correlaciones: la densidad depende del alcohol y del azúcar"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"fig_corr"</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="s2">"quality"</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">"quality"</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"r_alcohol"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">'alcohol'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"r_densidad_alcohol"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">corr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">'density'</span><span class="p">,</span><span class="w"> </span><span class="s1">'alcohol'</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</details>
+</div>
+<figure class="align-default" id="fig-corr">
+<img alt="_images/1f8321b849ce469cdc72b4615317611ae180de823a46c20948f4b059ef1fa034.png" src="_images/1f8321b849ce469cdc72b4615317611ae180de823a46c20948f4b059ef1fa034.png" />
+<figcaption>
+<p><span class="caption-number">Figura 12 </span><span class="caption-text">Matriz de correlación de Pearson entre las variables y la nota.</span><a class="headerlink" href="#fig-corr" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>La nota se correlaciona sobre todo con el alcohol (r = <span class="pasted-text">0.47</span>), y la densidad está muy ligada al alcohol (r = <span class="pasted-text">-0.67</span>), lo que anticipa que ambas se repartirán la importancia en las explicaciones SHAP (<a class="reference internal" href="#fig-corr"><span class="std std-numref">Figura 12</span></a>). Las demás correlaciones con la nota son débiles: la relación es no lineal y con interacciones, lo que favorece a los ensambles de árboles.</p>
+</section>
+<section id="declaracion-de-los-datos">
+<h2>Declaración de los datos<a class="headerlink" href="#declaracion-de-los-datos" title="Link to this heading">#</a></h2>
+</section>
+<section id="conjunto-principal-wine-quality">
+<h2>Conjunto principal: Wine Quality<a class="headerlink" href="#conjunto-principal-wine-quality" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Aspecto</p></th>
+<th class="head"><p>Detalle</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Procedencia</p></td>
+<td><p>Comisión de Viticultura de la Región de los Vinhos Verdes (Portugal), publicado en el UCI Machine Learning Repository (conjunto 186).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Referencia</p></td>
+<td><p>Cortez, P., Cerdeira, A., Almeida, F., Matos, T. y Reis, J. (2009). <em>Modeling wine preferences by data mining from physicochemical properties</em>. Decision Support Systems, 47(4), 547–553.</p></td>
+</tr>
+<tr class="row-even"><td><p>Licencia</p></td>
+<td><p>Creative Commons Attribution 4.0 (CC BY 4.0).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Periodo</p></td>
+<td><p>Muestras analizadas entre mayo de 2004 y febrero de 2007.</p></td>
+</tr>
+<tr class="row-even"><td><p>Contenido</p></td>
+<td><p>6497 vinos (1599 tintos y 4898 blancos), 11 variables fisicoquímicas medidas en laboratorio y la nota sensorial (mediana de al menos tres catadores, escala de 0 a 10).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Procesamiento</p></td>
+<td><p>Se unen tintos y blancos con la variable <code class="docutils literal notranslate"><span class="pre">tipo_vino</span></code> y se eliminan 1177 filas duplicadas exactas, que quedan 5320 vinos. El evento de interés es <code class="docutils literal notranslate"><span class="pre">quality</span> <span class="pre">&gt;=</span> <span class="pre">7</span></code> (18.97 % de los vinos). No hay valores faltantes.</p></td>
+</tr>
+<tr class="row-even"><td><p>Archivos</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">winequality-red.csv</span></code> y <code class="docutils literal notranslate"><span class="pre">winequality-white.csv</span></code> (separador <code class="docutils literal notranslate"><span class="pre">;</span></code>), sin modificar.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="sesgos-y-limitaciones-conocidos">
+<h3>Sesgos y limitaciones conocidos<a class="headerlink" href="#sesgos-y-limitaciones-conocidos" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Una sola región y época.</strong> Solo hay vinos Vinho Verde de 2004 a 2007; no hay garantía de que las relaciones valgan para otras regiones, uvas o añadas.</p></li>
+<li><p><strong>Desbalance de tipos.</strong> Hay casi tres blancos por cada tinto; el modelo ve menos ejemplos de tintos buenos.</p></li>
+<li><p><strong>Desbalance de clases.</strong> Solo 1 de cada 5 vinos es bueno y las notas 3 y 9 son muy raras.</p></li>
+<li><p><strong>Etiqueta subjetiva.</strong> La nota es la mediana de catadores; dos vinos con la misma química pueden tener notas distintas.</p></li>
+<li><p><strong>Variables ausentes.</strong> No hay uva, precio, marca ni añada; por privacidad del productor tampoco hay identificadores de lote. El análisis de residuos del Entregable 2 sugiere que vinos consecutivos de los archivos se parecen más de lo que explica la química (posibles lotes), lo que puede hacer algo optimista la validación aleatoria.</p></li>
+</ul>
+</section>
+<section id="usos-inadecuados">
+<h3>Usos inadecuados<a class="headerlink" href="#usos-inadecuados" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Reemplazar la evaluación sensorial o la certificación oficial.</p></li>
+<li><p>Fijar precios, rechazar lotes o tomar decisiones comerciales sin una validación local.</p></li>
+<li><p>Hacer recomendaciones de consumo de alcohol o de salud.</p></li>
+</ul>
+</section>
+</section>
+<section id="conjuntos-adicionales-solo-para-la-evaluacion-del-modelo-original">
+<h2>Conjuntos adicionales (solo para la evaluación del modelo original)<a class="headerlink" href="#conjuntos-adicionales-solo-para-la-evaluacion-del-modelo-original" title="Link to this heading">#</a></h2>
+<p>Todos provienen del UCI Machine Learning Repository con licencia CC BY 4.0 y se usan sin modificar, salvo quitar filas duplicadas exactas.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Conjunto</p></th>
+<th class="head"><p>DOI</p></th>
+<th class="head"><p>Evento</p></th>
+<th class="head"><p>Nota ética</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Abalone (Nash et al., 1994)</p></td>
+<td><p>10.24432/C55C7W</p></td>
+<td><p>anillos ≥ 11</p></td>
+<td><p>Datos biológicos, sin personas.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cardiotocography (Ayres-de Campos et al., 2000)</p></td>
+<td><p>10.24432/C51S4N</p></td>
+<td><p>NSP ≥ 2 (sospechoso o patológico)</p></td>
+<td><p>Registros clínicos anonimizados; el modelo no está validado para uso clínico.</p></td>
+</tr>
+<tr class="row-even"><td><p>Student Performance, portugués (Cortez y Silva, 2008)</p></td>
+<td><p>10.24432/C5TG7T</p></td>
+<td><p>G3 ≥ 10 (aprobado)</p></td>
+<td><p>Contiene sexo, edad y datos familiares de estudiantes: no debe usarse para decidir sobre personas. Se excluyen G1 y G2.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Heart Disease, Cleveland (Detrano et al., 1989)</p></td>
+<td><p>10.24432/C52P4X</p></td>
+<td><p>num ≥ 1 (enfermedad)</p></td>
+<td><p>Datos clínicos con sexo y edad; 6 valores faltantes imputados dentro de cada pliegue. Uso solo comparativo.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Los cuatro se eligieron antes de evaluar cualquier modelo en ellos, con el criterio fijado en <code class="docutils literal notranslate"><span class="pre">experiments/protocolo.md</span></code>: clasificación binaria obtenida al cortar una respuesta ordinal que viene en los propios datos. La procedencia detallada está en <code class="docutils literal notranslate"><span class="pre">data/adicionales/procedencia.json</span></code>.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="n">resumen_conjuntos</span><span class="p">()</span>
+<span class="n">mostrar</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"conjunto"</span><span class="p">:</span> <span class="s2">"Conjunto"</span><span class="p">,</span> <span class="s2">"titulo"</span><span class="p">:</span> <span class="s2">"Título"</span><span class="p">,</span> <span class="s2">"n"</span><span class="p">:</span> <span class="s2">"n"</span><span class="p">,</span> <span class="s2">"p_numericas"</span><span class="p">:</span> <span class="s2">"Numéricas"</span><span class="p">,</span> <span class="s2">"p_categoricas"</span><span class="p">:</span> <span class="s2">"Categóricas"</span><span class="p">,</span>
+                          <span class="s2">"niveles"</span><span class="p">:</span> <span class="s2">"Niveles de la respuesta"</span><span class="p">,</span> <span class="s2">"umbral"</span><span class="p">:</span> <span class="s2">"Umbral del evento"</span><span class="p">,</span> <span class="s2">"prevalencia"</span><span class="p">:</span> <span class="s2">"Prevalencia"</span><span class="p">,</span> <span class="s2">"faltantes"</span><span class="p">:</span> <span class="s2">"Faltantes"</span><span class="p">}),</span>
+        <span class="p">{</span><span class="s2">"Prevalencia"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.3f}</span><span class="s2">"</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_5e64d" class="dataframe tabla-libro">
+  <thead>
+    <tr>
+      <th id="T_5e64d_level0_col0" class="col_heading level0 col0" >Conjunto</th>
+      <th id="T_5e64d_level0_col1" class="col_heading level0 col1" >Título</th>
+      <th id="T_5e64d_level0_col2" class="col_heading level0 col2" >n</th>
+      <th id="T_5e64d_level0_col3" class="col_heading level0 col3" >Numéricas</th>
+      <th id="T_5e64d_level0_col4" class="col_heading level0 col4" >Categóricas</th>
+      <th id="T_5e64d_level0_col5" class="col_heading level0 col5" >Niveles de la respuesta</th>
+      <th id="T_5e64d_level0_col6" class="col_heading level0 col6" >Umbral del evento</th>
+      <th id="T_5e64d_level0_col7" class="col_heading level0 col7" >Prevalencia</th>
+      <th id="T_5e64d_level0_col8" class="col_heading level0 col8" >Faltantes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_5e64d_row0_col0" class="data row0 col0" >vino</td>
+      <td id="T_5e64d_row0_col1" class="data row0 col1" >Wine Quality (Vinho Verde)</td>
+      <td id="T_5e64d_row0_col2" class="data row0 col2" >5320</td>
+      <td id="T_5e64d_row0_col3" class="data row0 col3" >11</td>
+      <td id="T_5e64d_row0_col4" class="data row0 col4" >1</td>
+      <td id="T_5e64d_row0_col5" class="data row0 col5" >7</td>
+      <td id="T_5e64d_row0_col6" class="data row0 col6" >7</td>
+      <td id="T_5e64d_row0_col7" class="data row0 col7" >0.190</td>
+      <td id="T_5e64d_row0_col8" class="data row0 col8" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5e64d_row1_col0" class="data row1 col0" >abalone</td>
+      <td id="T_5e64d_row1_col1" class="data row1 col1" >Abalone (edad por anillos)</td>
+      <td id="T_5e64d_row1_col2" class="data row1 col2" >4177</td>
+      <td id="T_5e64d_row1_col3" class="data row1 col3" >7</td>
+      <td id="T_5e64d_row1_col4" class="data row1 col4" >1</td>
+      <td id="T_5e64d_row1_col5" class="data row1 col5" >28</td>
+      <td id="T_5e64d_row1_col6" class="data row1 col6" >11</td>
+      <td id="T_5e64d_row1_col7" class="data row1 col7" >0.346</td>
+      <td id="T_5e64d_row1_col8" class="data row1 col8" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5e64d_row2_col0" class="data row2 col0" >cardiotocografia</td>
+      <td id="T_5e64d_row2_col1" class="data row2 col1" >Cardiotocografía (estado fetal)</td>
+      <td id="T_5e64d_row2_col2" class="data row2 col2" >2115</td>
+      <td id="T_5e64d_row2_col3" class="data row2 col3" >21</td>
+      <td id="T_5e64d_row2_col4" class="data row2 col4" >0</td>
+      <td id="T_5e64d_row2_col5" class="data row2 col5" >3</td>
+      <td id="T_5e64d_row2_col6" class="data row2 col6" >2</td>
+      <td id="T_5e64d_row2_col7" class="data row2 col7" >0.221</td>
+      <td id="T_5e64d_row2_col8" class="data row2 col8" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5e64d_row3_col0" class="data row3 col0" >estudiantes</td>
+      <td id="T_5e64d_row3_col1" class="data row3 col1" >Student Performance (portugués)</td>
+      <td id="T_5e64d_row3_col2" class="data row3 col2" >649</td>
+      <td id="T_5e64d_row3_col3" class="data row3 col3" >13</td>
+      <td id="T_5e64d_row3_col4" class="data row3 col4" >17</td>
+      <td id="T_5e64d_row3_col5" class="data row3 col5" >17</td>
+      <td id="T_5e64d_row3_col6" class="data row3 col6" >10</td>
+      <td id="T_5e64d_row3_col7" class="data row3 col7" >0.846</td>
+      <td id="T_5e64d_row3_col8" class="data row3 col8" >0</td>
+    </tr>
+    <tr>
+      <td id="T_5e64d_row4_col0" class="data row4 col0" >corazon</td>
+      <td id="T_5e64d_row4_col1" class="data row4 col1" >Heart Disease (Cleveland)</td>
+      <td id="T_5e64d_row4_col2" class="data row4 col2" >303</td>
+      <td id="T_5e64d_row4_col3" class="data row4 col3" >9</td>
+      <td id="T_5e64d_row4_col4" class="data row4 col4" >4</td>
+      <td id="T_5e64d_row4_col5" class="data row4 col5" >5</td>
+      <td id="T_5e64d_row4_col6" class="data row4 col6" >1</td>
+      <td id="T_5e64d_row4_col7" class="data row4 col7" >0.459</td>
+      <td id="T_5e64d_row4_col8" class="data row4 col8" >6</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+</section>
+<section id="auditoria-de-fuga-de-informacion">
+<span id="sec-auditoria"></span><h2>Auditoría de fuga de información<a class="headerlink" href="#auditoria-de-fuga-de-informacion" title="Link to this heading">#</a></h2>
+<p>Antes de correr los experimentos definitivos se verificó con código cada vía de fuga que enumera el enunciado. La función <code class="docutils literal notranslate"><span class="pre">src/auditoria.py::tabla_auditoria</span></code> reproduce la tabla.</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">src.auditoria</span><span class="w"> </span><span class="kn">import</span> <span class="n">tabla_auditoria</span>
+<span class="n">auditoria</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">vecinos</span><span class="p">,</span> <span class="n">prep</span> <span class="o">=</span> <span class="n">tabla_auditoria</span><span class="p">()</span>
+<span class="n">mostrar</span><span class="p">(</span><span class="n">auditoria</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"riesgo"</span><span class="p">:</span> <span class="s2">"Riesgo"</span><span class="p">,</span> <span class="s2">"verificacion"</span><span class="p">:</span> <span class="s2">"Verificación"</span><span class="p">,</span> <span class="s2">"resultado"</span><span class="p">:</span> <span class="s2">"Resultado"</span><span class="p">,</span> <span class="s2">"conclusion"</span><span class="p">:</span> <span class="s2">"Conclusión"</span><span class="p">}))</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\USER\miniconda3\envs\mi_entorno\Lib\site-packages\tqdm\auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_73460" class="dataframe tabla-libro">
+  <thead>
+    <tr>
+      <th id="T_73460_level0_col0" class="col_heading level0 col0" >Riesgo</th>
+      <th id="T_73460_level0_col1" class="col_heading level0 col1" >Verificación</th>
+      <th id="T_73460_level0_col2" class="col_heading level0 col2" >Resultado</th>
+      <th id="T_73460_level0_col3" class="col_heading level0 col3" >Conclusión</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_73460_row0_col0" class="data row0 col0" >Preprocesamiento ajustado con todos los datos</td>
+      <td id="T_73460_row0_col1" class="data row0 col1" >Media del escalador dentro del pipeline frente a la media del entrenamiento externo y de todos los datos</td>
+      <td id="T_73460_row0_col2" class="data row0 col2" >coincide con el entrenamiento: True; difiere de todos los datos hasta en 0.0602</td>
+      <td id="T_73460_row0_col3" class="data row0 col3" >Sin fuga: el escalado y el one-hot se ajustan dentro de cada pliegue.</td>
+    </tr>
+    <tr>
+      <td id="T_73460_row1_col0" class="data row1 col0" >Balanceo aplicado a la prueba</td>
+      <td id="T_73460_row1_col1" class="data row1 col1" >Número de predicciones de un pipeline con SMOTE sobre el pliegue de prueba</td>
+      <td id="T_73460_row1_col2" class="data row1 col2" >1064 predicciones para 1064 vinos de prueba</td>
+      <td id="T_73460_row1_col3" class="data row1 col3" >Sin fuga: SMOTE y ADASYN solo actúan en el ajuste (pipeline de imbalanced-learn).</td>
+    </tr>
+    <tr>
+      <td id="T_73460_row2_col0" class="data row2 col0" >Búsqueda de hiperparámetros con datos de prueba</td>
+      <td id="T_73460_row2_col1" class="data row2 col1" >Los 3 pliegues internos se construyen solo con índices del entrenamiento externo</td>
+      <td id="T_73460_row2_col2" class="data row2 col2" >True</td>
+      <td id="T_73460_row2_col3" class="data row2 col3" >Sin fuga: la prueba externa nunca entra en la búsqueda; el umbral y la calibración del modelo original usan solo el entrenamiento (fuera de bolsa).</td>
+    </tr>
+    <tr>
+      <td id="T_73460_row3_col0" class="data row3 col0" >Duplicados entre particiones</td>
+      <td id="T_73460_row3_col1" class="data row3 col1" >Duplicados exactos antes de partir y vinos de prueba con un gemelo químico en el entrenamiento</td>
+      <td id="T_73460_row3_col2" class="data row3 col2" >1177 duplicados exactos eliminados (6497 → 5320); 0.04 % de los vinos de prueba tiene un gemelo químico (misma química, otra nota)</td>
+      <td id="T_73460_row3_col3" class="data row3 col3" >Sin duplicados exactos; los gemelos químicos con nota distinta son ruido de la etiqueta, no fuga.</td>
+    </tr>
+    <tr>
+      <td id="T_73460_row4_col0" class="data row4 col0" >Variables que codifican la respuesta</td>
+      <td id="T_73460_row4_col1" class="data row4 col1" >Asociación de cada variable con la nota y origen de las variables</td>
+      <td id="T_73460_row4_col2" class="data row4 col2" >máxima |r| = 0.47 (alcohol); todas son mediciones de laboratorio previas a la cata</td>
+      <td id="T_73460_row4_col3" class="data row4 col3" >Sin fuga: ninguna variable se deriva de la nota.</td>
+    </tr>
+    <tr>
+      <td id="T_73460_row5_col0" class="data row5 col0" >Mezcla temporal o espacial (lotes)</td>
+      <td id="T_73460_row5_col1" class="data row5 col1" >No hay fecha ni productor; se compara la validación aleatoria con una validación por bloques consecutivos del archivo</td>
+      <td id="T_73460_row5_col2" class="data row5 col2" >ver el estudio de validación por bloques en el capítulo de evaluación ampliada</td>
+      <td id="T_73460_row5_col3" class="data row5 col3" >Riesgo residual: si vinos del mismo lote caen en entrenamiento y prueba, las métricas pueden ser algo optimistas.</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p><strong>Gemelos químicos.</strong> Con las particiones de la repetición 1, la distancia mediana de un vino de prueba a su vecino más cercano del entrenamiento (variables estandarizadas) es prácticamente la misma que la de un vino de entrenamiento a su vecino más cercano dentro del entrenamiento, y casi ningún vino de prueba tiene una copia química en el entrenamiento:</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mostrar</span><span class="p">(</span><span class="n">vecinos</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">"fold"</span><span class="p">:</span> <span class="s2">"Pliegue"</span><span class="p">,</span> <span class="s2">"prueba_con_gemelo_exacto"</span><span class="p">:</span> <span class="s2">"Prueba con gemelo exacto"</span><span class="p">,</span> <span class="s2">"prueba_con_vecino_muy_cercano"</span><span class="p">:</span> <span class="s2">"Prueba con vecino a &lt; 0.1 DE"</span><span class="p">,</span>
+                                <span class="s2">"mediana_distancia_prueba"</span><span class="p">:</span> <span class="s2">"Distancia mediana prueba → entrenamiento"</span><span class="p">,</span> <span class="s2">"mediana_distancia_dentro_entrenamiento"</span><span class="p">:</span> <span class="s2">"Distancia mediana dentro del entrenamiento"</span><span class="p">}),</span>
+        <span class="p">{</span><span class="s2">"Prueba con gemelo exacto"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.2%}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Prueba con vecino a &lt; 0.1 DE"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.2%}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Distancia mediana prueba → entrenamiento"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.3f}</span><span class="s2">"</span><span class="p">,</span>
+         <span class="s2">"Distancia mediana dentro del entrenamiento"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.3f}</span><span class="s2">"</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_54e83" class="dataframe tabla-libro">
+  <thead>
+    <tr>
+      <th id="T_54e83_level0_col0" class="col_heading level0 col0" >Pliegue</th>
+      <th id="T_54e83_level0_col1" class="col_heading level0 col1" >Prueba con gemelo exacto</th>
+      <th id="T_54e83_level0_col2" class="col_heading level0 col2" >Prueba con vecino a < 0.1 DE</th>
+      <th id="T_54e83_level0_col3" class="col_heading level0 col3" >Distancia mediana prueba → entrenamiento</th>
+      <th id="T_54e83_level0_col4" class="col_heading level0 col4" >Distancia mediana dentro del entrenamiento</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_54e83_row0_col0" class="data row0 col0" >0</td>
+      <td id="T_54e83_row0_col1" class="data row0 col1" >0.09%</td>
+      <td id="T_54e83_row0_col2" class="data row0 col2" >1.79%</td>
+      <td id="T_54e83_row0_col3" class="data row0 col3" >0.866</td>
+      <td id="T_54e83_row0_col4" class="data row0 col4" >0.863</td>
+    </tr>
+    <tr>
+      <td id="T_54e83_row1_col0" class="data row1 col0" >1</td>
+      <td id="T_54e83_row1_col1" class="data row1 col1" >0.00%</td>
+      <td id="T_54e83_row1_col2" class="data row1 col2" >0.75%</td>
+      <td id="T_54e83_row1_col3" class="data row1 col3" >0.861</td>
+      <td id="T_54e83_row1_col4" class="data row1 col4" >0.875</td>
+    </tr>
+    <tr>
+      <td id="T_54e83_row2_col0" class="data row2 col0" >2</td>
+      <td id="T_54e83_row2_col1" class="data row2 col1" >0.00%</td>
+      <td id="T_54e83_row2_col2" class="data row2 col2" >1.22%</td>
+      <td id="T_54e83_row2_col3" class="data row2 col3" >0.883</td>
+      <td id="T_54e83_row2_col4" class="data row2 col4" >0.869</td>
+    </tr>
+    <tr>
+      <td id="T_54e83_row3_col0" class="data row3 col0" >3</td>
+      <td id="T_54e83_row3_col1" class="data row3 col1" >0.09%</td>
+      <td id="T_54e83_row3_col2" class="data row3 col2" >1.32%</td>
+      <td id="T_54e83_row3_col3" class="data row3 col3" >0.870</td>
+      <td id="T_54e83_row3_col4" class="data row3 col4" >0.878</td>
+    </tr>
+    <tr>
+      <td id="T_54e83_row4_col0" class="data row4 col0" >4</td>
+      <td id="T_54e83_row4_col1" class="data row4 col1" >0.00%</td>
+      <td id="T_54e83_row4_col2" class="data row4 col2" >0.85%</td>
+      <td id="T_54e83_row4_col3" class="data row4 col3" >0.879</td>
+      <td id="T_54e83_row4_col4" class="data row4 col4" >0.871</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p><strong>Lotes y orden del archivo.</strong> Los residuos del Entregable 2 mostraron autocorrelación en el orden de los archivos originales, que desaparece al desordenar los vinos: vinos consecutivos se parecen más de lo que explica su química, probablemente porque pertenecen al mismo productor o lote. No hay una variable de lote, así que no se puede agrupar de forma exacta. Como verificación, cada modelo se evaluó también con pliegues formados por <strong>bloques de 10 vinos consecutivos</strong> del archivo, que separan entre entrenamiento y prueba a los vinos vecinos:</p>
+<div class="cell tag_hide-input docutils container">
+<details class="admonition hide above-input">
+<summary aria-label="Toggle hidden content">
+<p class="collapsed admonition-title">Show code cell source</p>
+<p class="expanded admonition-title">Hide code cell source</p>
+</summary>
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bl</span> <span class="o">=</span> <span class="n">resultado</span><span class="p">(</span><span class="s2">"robustez_bloques.csv"</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"auc"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">resultado</span><span class="p">(</span><span class="s2">"robustez_filas.csv"</span><span class="p">)</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span><span class="p">[</span><span class="n">ref</span><span class="p">[</span><span class="s2">"estudio"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"referencia"</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"modelo"</span><span class="p">)[</span><span class="s2">"auc"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">"AUC con pliegues aleatorios"</span><span class="p">:</span> <span class="n">ref</span><span class="p">,</span> <span class="s2">"AUC con bloques del archivo"</span><span class="p">:</span> <span class="n">bl</span><span class="p">})</span>
+<span class="n">t</span><span class="p">[</span><span class="s2">"Diferencia"</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="s2">"AUC con bloques del archivo"</span><span class="p">]</span> <span class="o">-</span> <span class="n">t</span><span class="p">[</span><span class="s2">"AUC con pliegues aleatorios"</span><span class="p">]</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">"AUC con pliegues aleatorios"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">t</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"Modelo"</span>
+<span class="n">caida_media</span><span class="p">,</span> <span class="n">caida_bof</span> <span class="o">=</span> <span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="s2">"Diferencia"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="o">-</span><span class="n">t</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">ORIGINAL</span><span class="p">,</span> <span class="s2">"Diferencia"</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">caida_media</span> <span class="o">&gt;</span> <span class="mf">0.005</span><span class="p">:</span>
+    <span class="n">frase</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"Con bloques del archivo el AUC cae en promedio </span><span class="si">{</span><span class="n">caida_media</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> (en el Bosque Ordinal Focalizado, </span><span class="si">{</span><span class="n">caida_bof</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">). "</span>
+             <span class="s2">"Esa caída estima el optimismo que introducen los vinos «hermanos» cuando quedan a ambos lados de la partición."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">frase</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s2">"Con bloques del archivo el AUC cambia en promedio </span><span class="si">{</span><span class="o">-</span><span class="n">caida_media</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2"> (en el Bosque Ordinal Focalizado, </span><span class="si">{</span><span class="o">-</span><span class="n">caida_bof</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">), "</span>
+             <span class="s2">"así que no hay indicios de que los vinos vecinos inflen el desempeño."</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">"frase_bloques"</span><span class="p">,</span> <span class="n">frase</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">mostrar</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(),</span> <span class="p">{</span><span class="s2">"AUC con pliegues aleatorios"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"AUC con bloques del archivo"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Diferencia"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:+.4f}</span><span class="s2">"</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</details>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_791a1" class="dataframe tabla-libro">
+  <thead>
+    <tr>
+      <th id="T_791a1_level0_col0" class="col_heading level0 col0" >Modelo</th>
+      <th id="T_791a1_level0_col1" class="col_heading level0 col1" >AUC con pliegues aleatorios</th>
+      <th id="T_791a1_level0_col2" class="col_heading level0 col2" >AUC con bloques del archivo</th>
+      <th id="T_791a1_level0_col3" class="col_heading level0 col3" >Diferencia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_791a1_row0_col0" class="data row0 col0" >CatBoost</td>
+      <td id="T_791a1_row0_col1" class="data row0 col1" >0.8620</td>
+      <td id="T_791a1_row0_col2" class="data row0 col2" >0.8534</td>
+      <td id="T_791a1_row0_col3" class="data row0 col3" >-0.0086</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row1_col0" class="data row1 col0" >Random Forest</td>
+      <td id="T_791a1_row1_col1" class="data row1 col1" >0.8605</td>
+      <td id="T_791a1_row1_col2" class="data row1 col2" >0.8494</td>
+      <td id="T_791a1_row1_col3" class="data row1 col3" >-0.0112</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row2_col0" class="data row2 col0" >Bosque Ordinal Focalizado</td>
+      <td id="T_791a1_row2_col1" class="data row2 col1" >0.8588</td>
+      <td id="T_791a1_row2_col2" class="data row2 col2" >0.8527</td>
+      <td id="T_791a1_row2_col3" class="data row2 col3" >-0.0061</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row3_col0" class="data row3 col0" >LightGBM</td>
+      <td id="T_791a1_row3_col1" class="data row3 col1" >0.8580</td>
+      <td id="T_791a1_row3_col2" class="data row3 col2" >0.8489</td>
+      <td id="T_791a1_row3_col3" class="data row3 col3" >-0.0091</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row4_col0" class="data row4 col0" >XGBoost</td>
+      <td id="T_791a1_row4_col1" class="data row4 col1" >0.8558</td>
+      <td id="T_791a1_row4_col2" class="data row4 col2" >0.8469</td>
+      <td id="T_791a1_row4_col3" class="data row4 col3" >-0.0089</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row5_col0" class="data row5 col0" >KNN</td>
+      <td id="T_791a1_row5_col1" class="data row5 col1" >0.8474</td>
+      <td id="T_791a1_row5_col2" class="data row5 col2" >0.8369</td>
+      <td id="T_791a1_row5_col3" class="data row5 col3" >-0.0105</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row6_col0" class="data row6 col0" >SVM</td>
+      <td id="T_791a1_row6_col1" class="data row6 col1" >0.8449</td>
+      <td id="T_791a1_row6_col2" class="data row6 col2" >0.8437</td>
+      <td id="T_791a1_row6_col3" class="data row6 col3" >-0.0012</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row7_col0" class="data row7 col0" >Regresión Logística (L1/L2)</td>
+      <td id="T_791a1_row7_col1" class="data row7 col1" >0.8289</td>
+      <td id="T_791a1_row7_col2" class="data row7 col2" >0.8271</td>
+      <td id="T_791a1_row7_col3" class="data row7 col3" >-0.0018</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row8_col0" class="data row8 col0" >Decision Tree</td>
+      <td id="T_791a1_row8_col1" class="data row8 col1" >0.7950</td>
+      <td id="T_791a1_row8_col2" class="data row8 col2" >0.8007</td>
+      <td id="T_791a1_row8_col3" class="data row8 col3" >+0.0057</td>
+    </tr>
+    <tr>
+      <td id="T_791a1_row9_col0" class="data row9 col0" >Naive Bayes</td>
+      <td id="T_791a1_row9_col1" class="data row9 col1" >0.7645</td>
+      <td id="T_791a1_row9_col2" class="data row9 col2" >0.7623</td>
+      <td id="T_791a1_row9_col3" class="data row9 col3" >-0.0022</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p><span class="pasted-text">Con bloques del archivo el AUC cae en promedio 0.005 (en el Bosque Ordinal Focalizado, 0.006). Esa caída estima el optimismo que introducen los vinos «hermanos» cuando quedan a ambos lados de la partición.</span> Es un riesgo residual compartido por todos los modelos (no cambia la comparación entre ellos, que usa siempre las mismas particiones), y se declara como limitación.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="01_correcciones.html"
+       title="página anterior">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">anterior</p>
+        <p class="prev-next-title">Trazabilidad de las correcciones del Entregable 2</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03_benchmarks.html"
+       title="siguiente página">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">siguiente</p>
+        <p class="prev-next-title">Modelos benchmark y mejores combinaciones</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contenido
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#etl">ETL</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda">EDA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#declaracion-de-los-datos">Declaración de los datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conjunto-principal-wine-quality">Conjunto principal: Wine Quality</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sesgos-y-limitaciones-conocidos">Sesgos y limitaciones conocidos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usos-inadecuados">Usos inadecuados</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conjuntos-adicionales-solo-para-la-evaluacion-del-modelo-original">Conjuntos adicionales (solo para la evaluación del modelo original)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#auditoria-de-fuga-de-informacion">Auditoría de fuga de información</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+Por Roger Daza, Matteo Del Sole y Rafael Romero
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
