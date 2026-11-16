@@ -42,7 +42,8 @@ Las versiones exactas están fijadas en `requirements.txt` (dashboard) y `requir
 
 | Ítem | Dónde |
 |---|---|
-| Código público y versionado | https://github.com/rafaelromero06/Eda_Machine, carpeta `entregable3/` |
+| Dashboard desplegado | https://calidad-vino-ml-24mf.onrender.com/ |
+| Código público y versionado | https://github.com/rafaelromero06/Proyecto_Machine_Learning, carpeta `entregable3/` (*release* `v1.0`) |
 | Identificador persistente | PENDIENTE: DOI de Zenodo de la *release* final |
 | Protocolo pre-registrado con fecha | `experiments/protocolo.md`, commit `8bc0c2d`, tag `protocolo-e3-v1` (26/10/2026) |
 | Datos u obtención exacta | `data/` (vino y conjuntos adicionales, sin modificar) y `data/adicionales/procedencia.json` con los DOI de UCI |
@@ -68,7 +69,22 @@ mostrar(resumen.rename(columns={"origen": "Origen", "conjunto": "Conjunto", "tar
 
 ## Declaración de autoría y uso de herramientas
 
-PENDIENTE: declaración firmada por el equipo (ver el capítulo 9).
+| Integrante | Aporte principal |
+|---|---|
+| Rafael Romero | Modelo original (Bosque Ordinal Focalizado) |
+| Roger Daza | Análisis exploratorio de datos y tablas |
+| Matteo Del Sole | Integración e informes |
+| Claude (Anthropic) | Asistente de inteligencia artificial: diseño del dashboard, apoyo en la programación, la ejecución de los experimentos y la redacción (detalle en el capítulo 9) |
+
+Herramientas usadas: Python con numpy, scipy, pandas y scikit-learn como herramientas de cálculo; XGBoost, LightGBM y CatBoost solo como modelos de comparación; Optuna para la búsqueda de hiperparámetros; SHAP para la interpretabilidad; Dash, dash-bootstrap-components y Plotly para el dashboard; Jupyter Book para este informe; GitHub, GitHub Actions, Render y Zenodo para el código, las pruebas, el despliegue y el archivo; y Claude (Anthropic) mediante Claude Code, en los usos que declara el capítulo 9.
+
+Al firmar, cada integrante declara que el trabajo es del equipo, que revisó el código y el informe, que entiende el funcionamiento del modelo original y de las pruebas, que puede explicarlos y modificarlos en la sustentación, y que asume la responsabilidad por su contenido.
+
+| Integrante | Firma | Fecha |
+|---|---|---|
+| Roger Daza | *Roger Daza* | 15 de noviembre de 2026 |
+| Matteo Del Sole | *Matteo Del Sole* | 15 de noviembre de 2026 |
+| Rafael Romero | *Rafael Romero* | 15 de noviembre de 2026 |
 
 ## Bibliografía
 

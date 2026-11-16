@@ -35,7 +35,7 @@ sphinx:
     suppress_warnings: ["mystnb.unknown_mime_type"]
 
 repository:
-  url: https://github.com/rafaelromero06/Eda_Machine
+  url: https://github.com/rafaelromero06/Proyecto_Machine_Learning
   path_to_book: entregable3/book
   branch: main
 

@@ -8,7 +8,7 @@
 - **Algoritmo:** aprende las probabilidades acumuladas P(nota ≥ t) con una impureza ponderada por un núcleo centrado en el umbral 7, puntúa combinando los umbrales vecinos con un segundo núcleo y calibra el puntaje con los casos fuera de bolsa.
 - **Hiperparámetros finales:** `n_estimators` = 438, `max_features` = None, `min_samples_leaf` = 1, `ancho_agregacion` = 1.281, `ancho_particion` = 2.55, `desplazamiento` = 0.3374. Se despliegan 231 árboles (el menor número con AUC fuera de bolsa a menos de 0.001 del bosque completo).
 - **Licencia:** MIT. **Cita:** ver `CITATION.cff`.
-- **Contacto:** repositorio https://github.com/rafaelromero06/Eda_Machine.
+- **Contacto:** repositorio https://github.com/rafaelromero06/Proyecto_Machine_Learning; dashboard https://calidad-vino-ml-24mf.onrender.com/
 
 ## Uso previsto
 

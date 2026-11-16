@@ -73,4 +73,4 @@ El Entregable 2 comparó 136 combinaciones de 7 modelos, 4 técnicas de balanceo
 | 9 | Conclusiones, limitaciones y declaración de uso de herramientas |
 | 10 | Reproducibilidad, tabla maestra y bibliografía |
 
-**Dashboard:** PENDIENTE (URL pública de Render una vez desplegado). **Código:** https://github.com/rafaelromero06/Eda_Machine (carpeta `entregable3/`).
+**Dashboard:** https://calidad-vino-ml-24mf.onrender.com/ **Código:** https://github.com/rafaelromero06/Proyecto_Machine_Learning (carpeta `entregable3/`).

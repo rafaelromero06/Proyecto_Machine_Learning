@@ -1,7 +1,7 @@
 import json, time, datetime, urllib.parse, urllib.request
 from pathlib import Path
 
-UA = {"User-Agent": "revision-literatura-curso-ML/1.0 (mailto:arafaelr@uninorte.edu.co)"}
+UA = {"User-Agent": "revision-literatura-curso-ML/1.0"}
 SEMILLAS = {
     "Tutz2022": "DOI:10.1007/s00357-021-09406-4",
     "LechnerOkasa": "DOI:10.1007/s00181-024-02646-4",

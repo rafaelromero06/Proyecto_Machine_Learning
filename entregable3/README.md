@@ -6,7 +6,7 @@ Autores: Roger Daza, Matteo Del Sole y Rafael Romero.
 - **Tarea:** clasificar si un vino es bueno (nota de calidad ≥ 7) a partir de 11 variables fisicoquímicas y el tipo de vino.
 - **Modelo original:** Bosque Ordinal Focalizado (`src/original_model.py`), programado desde cero con numpy y scipy.
 - **Protocolo pre-registrado:** `experiments/protocolo.md`, congelado con la etiqueta de Git `protocolo-e3-v1` (26 de octubre de 2026).
-- **Dashboard:** «Cata Ciega», aplicación Dash multipágina (`app.py`, `pages/`) con las secciones Contexto, EDA y Modelos, un juego de cata a ciegas y la ficha del modelo, desplegable en Render.
+- **Dashboard:** «Cata Ciega», aplicación Dash multipágina (`app.py`, `pages/`) con las secciones Contexto, EDA y Modelos, un juego de cata a ciegas y la ficha del modelo, publicada en https://calidad-vino-ml-24mf.onrender.com/
 - **Informe:** Jupyter Book en `book/`.
 
 ## Colaboradores
@@ -109,6 +109,8 @@ jupyter-book build book/                        # informe
 `python experiments/ejecutar_todo.py` corre todos los pasos de experimentos en orden (acepta el nombre del paso desde el que se quiere empezar, por ejemplo `ablacion`). Las corridas se pueden interrumpir y retomar: `correr_validacion.py` salta las tareas que ya están en `experiments/resultados/cv_filas.csv`.
 
 ## Despliegue en Render
+
+URL pública: https://calidad-vino-ml-24mf.onrender.com/
 
 El archivo `render.yaml` de la raíz del repositorio define el servicio (carpeta raíz `entregable3`, `pip install -r requirements.txt` y `gunicorn app:server`). En Render: **New → Blueprint**, conectar el repositorio de GitHub y aceptar. También se puede crear un *Web Service* a mano con *Root Directory* `entregable3`, *Build Command* `pip install -r requirements.txt` y *Start Command* `gunicorn app:server --workers 1 --threads 4 --timeout 120`. El plan gratuito se suspende sin tráfico: conviene abrir la URL unos minutos antes de la sustentación.
 

@@ -79,10 +79,4 @@ En este entregable se usó **Claude (Anthropic)**, un asistente de inteligencia 
 
 Las decisiones de diseño del modelo original se tomaron a partir de experimentos piloto documentados (anexo A del protocolo y `experiments/bitacora_diseno.csv`), y todos los números del libro se calculan con el código del repositorio al compilarlo.
 
-Al firmar, cada integrante declara que revisó el código y el informe, que entiende el funcionamiento del modelo original y de las pruebas, que puede explicarlos y modificarlos en la sustentación, y que asume la responsabilidad por su contenido.
-
-| Integrante | Firma | Fecha |
-|---|---|---|
-| Roger Daza | | |
-| Matteo Del Sole | | |
-| Rafael Romero | | |
+La declaración de autoría, firmada por el equipo, está al final del capítulo 10.

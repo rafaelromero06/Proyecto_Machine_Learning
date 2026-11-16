@@ -1,10 +1,11 @@
 cff-version: 1.2.0
 message: "Si usa este software o sus resultados, cítelo así."
 title: "Calidad del vino: dashboard predictivo y Bosque Ordinal Focalizado"
-version: 1.0.0
-date-released: 2026-10-26
+version: "1.0"
+date-released: 2026-11-15
 license: MIT
-repository-code: "https://github.com/rafaelromero06/Eda_Machine"
+repository-code: "https://github.com/rafaelromero06/Proyecto_Machine_Learning"
+url: "https://calidad-vino-ml-24mf.onrender.com/"
 authors:
   - family-names: Daza
     given-names: Roger

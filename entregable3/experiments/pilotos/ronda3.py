@@ -6,7 +6,7 @@ from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.metrics import roc_auc_score
 from joblib import Parallel, delayed
 
-BASE = Path(r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\modelado_entregable2\modelado")
+BASE = Path(__file__).resolve().parents[3] / "modelado_entregable2" / "modelado"
 sys.path.insert(0, str(BASE))
 from src.data_prep import preparar_dataset, separar_X_y
 

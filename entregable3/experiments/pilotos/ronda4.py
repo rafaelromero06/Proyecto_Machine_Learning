@@ -5,15 +5,13 @@ from sklearn.model_selection import StratifiedKFold, RepeatedStratifiedKFold
 from sklearn.metrics import roc_auc_score, brier_score_loss
 from joblib import Parallel, delayed
 
-sys.path.insert(0, r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\entregable3")
+RAIZ = Path(__file__).resolve().parents[2]
+DATOS = RAIZ.parent / "modelado_entregable2" / "modelado" / "data"
+sys.path.insert(0, str(RAIZ))
 from src.original_model import BosqueOrdinalFocalizado
 
-import importlib.util
-spec = importlib.util.spec_from_file_location("dp", r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\modelado_entregable2\modelado\src\data_prep.py",
-                                              submodule_search_locations=None)
-
-df = pd.concat([pd.read_csv(r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\modelado_entregable2\modelado\data\winequality-red.csv", sep=";").assign(tipo=0),
-                pd.read_csv(r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\modelado_entregable2\modelado\data\winequality-white.csv", sep=";").assign(tipo=1)]).drop_duplicates().reset_index(drop=True)
+df = pd.concat([pd.read_csv(DATOS / "winequality-red.csv", sep=";").assign(tipo=0),
+                pd.read_csv(DATOS / "winequality-white.csv", sep=";").assign(tipo=1)]).drop_duplicates().reset_index(drop=True)
 q = df.pop("quality").to_numpy(int)
 X = df.to_numpy(float)
 yb = (q >= 7).astype(int)

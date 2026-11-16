@@ -50,7 +50,7 @@ def main():
 - **Algoritmo:** aprende las probabilidades acumuladas P(nota ≥ t) con una impureza ponderada por un núcleo centrado en el umbral 7, puntúa combinando los umbrales vecinos con un segundo núcleo y calibra el puntaje con los casos fuera de bolsa.
 - **Hiperparámetros finales:** {", ".join(f"`{k}` = {val:.4g}" if isinstance(val, float) else f"`{k}` = {val}" for k, val in hp.items())}. Se despliegan {red.get('arboles_desplegados', hp.get('n_estimators'))} árboles (el menor número con AUC fuera de bolsa a menos de 0.001 del bosque completo).
 - **Licencia:** MIT. **Cita:** ver `CITATION.cff`.
-- **Contacto:** repositorio https://github.com/rafaelromero06/Eda_Machine.
+- **Contacto:** repositorio https://github.com/rafaelromero06/Proyecto_Machine_Learning; dashboard https://calidad-vino-ml-24mf.onrender.com/
 
 ## Uso previsto
 

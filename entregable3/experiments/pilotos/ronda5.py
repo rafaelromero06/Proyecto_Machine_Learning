@@ -3,10 +3,12 @@ import numpy as np, pandas as pd
 from sklearn.model_selection import StratifiedKFold, RepeatedStratifiedKFold
 from sklearn.metrics import roc_auc_score, brier_score_loss
 from joblib import Parallel, delayed
-sys.path.insert(0, r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\entregable3")
+from pathlib import Path
+RAIZ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(RAIZ))
 from src.original_model import BosqueOrdinalFocalizado
-d = r"C:\Users\USER\OneDrive\Escritorio\Eda_Machine\modelado_entregable2\modelado\data"
-df = pd.concat([pd.read_csv(d + r"\winequality-red.csv", sep=";").assign(tipo=0), pd.read_csv(d + r"\winequality-white.csv", sep=";").assign(tipo=1)]).drop_duplicates().reset_index(drop=True)
+d = RAIZ.parent / "modelado_entregable2" / "modelado" / "data"
+df = pd.concat([pd.read_csv(d / "winequality-red.csv", sep=";").assign(tipo=0), pd.read_csv(d / "winequality-white.csv", sep=";").assign(tipo=1)]).drop_duplicates().reset_index(drop=True)
 q = df.pop("quality").to_numpy(int); X = df.to_numpy(float); yb = (q >= 7).astype(int)
 tr0, _ = next(StratifiedKFold(5, shuffle=True, random_state=42).split(X, yb))
 Xd, qd, yd = X[tr0], q[tr0], yb[tr0]

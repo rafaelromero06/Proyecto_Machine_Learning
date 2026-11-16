@@ -98,4 +98,4 @@ Cada modelo final está en `artifacts/<modelo>/` con `modelo.joblib` (comprimido
 4. En Render, crear un *Blueprint* con el `render.yaml` de la raíz (o un *Web Service* con carpeta raíz `entregable3`, `pip install -r requirements.txt` como comando de construcción y `gunicorn app:server --workers 1 --threads 4 --timeout 120` como comando de inicio).
 5. Revisar los registros de construcción y probar todas las páginas y *callbacks* en la URL pública. En el plan gratuito el servicio se suspende sin tráfico y la primera visita tarda; se usa un solo proceso de gunicorn para no superar la memoria disponible.
 
-La URL pública del dashboard se registra en la introducción del libro una vez desplegado.
+El dashboard está publicado en https://calidad-vino-ml-24mf.onrender.com/

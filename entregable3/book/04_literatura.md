@@ -28,7 +28,7 @@ La novedad del modelo original no se declara: se busca evidencia de que no exist
 
 ## Protocolo de búsqueda
 
-La búsqueda se hizo el **26 de octubre de 2026** con los scripts `experiments/revision_literatura/buscar.py` (bases bibliográficas) y `citas.py` (búsqueda por citación). Los resultados crudos quedaron guardados con la fecha en el nombre del archivo, y los scripts se pueden volver a ejecutar antes de la entrega final para repetir la consulta.
+La búsqueda se hizo el **26 de octubre de 2026** y se repitió el **15 de noviembre de 2026**, antes de la entrega final ({ref}`sec-repeticion`), con los scripts `experiments/revision_literatura/buscar.py` (bases bibliográficas), `citas.py` (búsqueda por citación) y `repositorios.py` (GitHub). Los resultados crudos quedaron guardados con la fecha en el nombre del archivo.
 
 **Bases consultadas.** OpenAlex (más de 250 millones de trabajos; integra el antiguo Microsoft Academic Graph y la mayoría de las revistas indexadas en Scopus y Web of Science), Semantic Scholar (centrada en computación e inteligencia artificial), arXiv (preprints de aprendizaje automático y estadística) y Crossref (registro de DOI de casi todas las editoriales). Scopus y Web of Science no tienen una API abierta sin suscripción institucional, por lo que se reemplazaron por OpenAlex y Crossref, que cubren sus mismas revistas.
 
@@ -75,6 +75,52 @@ mostrar(pd.DataFrame([{"Consulta en GitHub": c["consulta"], "Repositorios": c["t
                        "Ejemplos": "; ".join(i["repo"] for i in c["items"][:3])} for c in repos["consultas"]]))
 ```
 
+(sec-repeticion)=
+## Repetición de la búsqueda
+
+El 15 de noviembre de 2026 se ejecutaron de nuevo las mismas ocho cadenas en las cuatro bases, la búsqueda por citación desde los seis trabajos más cercanos y las siete consultas en GitHub. La tabla compara el número de resultados de ambas fechas y cuenta, entre los títulos que se revisan en cada base (los 50 primeros, o 25 en Crossref), los que no habían aparecido en la primera búsqueda.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+import re
+busqueda2 = json.loads((RL / "busqueda_2026-11-15.json").read_text(encoding="utf-8"))
+citas2 = json.loads((RL / "citas_2026-11-15.json").read_text(encoding="utf-8"))
+repos1 = json.loads((RL / "repositorios_2026-10-26.json").read_text(encoding="utf-8"))
+repos2 = json.loads((RL / "repositorios_2026-11-15.json").read_text(encoding="utf-8"))
+
+
+def clave(t):
+    return re.sub(r"\W+", "", (t or "").lower())
+
+
+vistos = {clave(i.get("titulo")) for c in busqueda["consultas"] for i in c["items"]}
+antes = {(c["cadena"], c["base"]): c["total"] for c in busqueda["consultas"]}
+filas, nuevos = [], set()
+for c in busqueda2["consultas"]:
+    revisados = c["items"][:25 if c["base"] == "Crossref" else 50]
+    n = {clave(i.get("titulo")) for i in revisados} - vistos
+    nuevos |= n
+    if c["total"]:
+        filas.append({"Cadena": c["cadena"], "Base": c["base"], "Resultados 26/10": antes.get((c["cadena"], c["base"])),
+                      "Resultados 15/11": c["total"], "Títulos nuevos revisados": len(n)})
+mostrar(pd.DataFrame(filas))
+
+vistas = {clave(p.get("title")) for s in citas["semillas"].values() for t in ("citas", "referencias") for p in s[t]}
+citas_nuevas = {clave(p.get("title")) for s in citas2["semillas"].values() for t in ("citas", "referencias") for p in s[t]} - vistas
+repos_vistos = {i["repo"] for c in repos1["consultas"] for i in c["items"]}
+glue("n_nuevos", len(nuevos), display=False)
+glue("n_citas_nuevas", len(citas_nuevas), display=False)
+glue("n_repos_nuevos", len({i["repo"] for c in repos2["consultas"] for i in c["items"]} - repos_vistos), display=False)
+```
+
+Aparecieron {glue:text}`n_nuevos` títulos que no estaban en la primera búsqueda. Casi todos son aplicaciones de bosques aleatorios o de reglas de puntuación a otros problemas (incendios, salud, energía, educación) que comparten palabras con las cadenas. Cuatro son relevantes según el criterio anterior y ninguno cambia la declaración de novedad:
+
+- dos aplicaciones de árboles y bosques a la calidad del vino publicadas en 2026 (una con árbol de decisión y bosque aleatorio sobre el vino tinto, otra con selección de variables y clasificadores estándar), que tratan la nota como clase o la binarizan sin usar los niveles;
+- el artículo del paquete OGBoost, el *boosting* ordinal con variable latente que ya figuraba en la primera búsqueda como preprint, y que predice la clase ordinal;
+- una revisión de 2025 sobre reglas de puntuación propias para estimar y evaluar pronósticos, que no las usa como criterio de partición de árboles.
+
+La búsqueda por citación sumó {glue:text}`n_citas_nuevas` títulos nuevos (trabajos que citan a los seis más cercanos, sobre todo aplicaciones a otros dominios), ninguno relevante. En GitHub aparecieron {glue:text}`n_repos_nuevos` repositorios nuevos; el único cercano compara la nota del vino tinto tratada como ordinal o como categórica, sin bosques ponderados por umbral ni combinación de umbrales.
+
 ## Trabajos más cercanos y diferencias
 
 ```{code-cell} ipython3
@@ -95,6 +141,6 @@ Los métodos existentes no resuelven la limitación identificada (la pérdida de
 
 ## Declaración de novedad
 
-> Según la búsqueda descrita (cuatro bases bibliográficas, ocho cadenas, búsqueda por citación desde seis trabajos y revisión de repositorios, realizada el 26 de octubre de 2026), no se encontraron estudios que apliquen a la clasificación de vinos buenos del conjunto Wine Quality un bosque que (i) elija las particiones con una impureza acumulada ponderada por un núcleo centrado en el umbral del evento, (ii) combine las probabilidades acumuladas de los umbrales vecinos para puntuar el evento y (iii) calibre ese puntaje fuera de bolsa. Los trabajos más cercanos son el Ordered Forest {cite:p}`lechner2024`, que estima cada probabilidad acumulada con un bosque separado y no combina umbrales; los árboles ordinales sin puntajes {cite:p}`tutz2022`, que combinan modelos binarios para predecir la clase ordinal; Ordinal Forest y fabOF {cite:p}`hornung2020,buczak2024fabof`, que usan puntajes de clase optimizados; y la descomposición de {cite:t}`frank2001`, que entrena un clasificador por umbral. En el conjunto Wine Quality, la literatura encontrada usa bosques y Extra-Trees como clasificadores estándar o la regresión ordinal clásica, pero no este mecanismo.
+> Según la búsqueda descrita (cuatro bases bibliográficas, ocho cadenas, búsqueda por citación desde seis trabajos y revisión de repositorios, realizada el 26 de octubre de 2026 y repetida el 15 de noviembre de 2026), no se encontraron estudios que apliquen a la clasificación de vinos buenos del conjunto Wine Quality un bosque que (i) elija las particiones con una impureza acumulada ponderada por un núcleo centrado en el umbral del evento, (ii) combine las probabilidades acumuladas de los umbrales vecinos para puntuar el evento y (iii) calibre ese puntaje fuera de bolsa. Los trabajos más cercanos son el Ordered Forest {cite:p}`lechner2024`, que estima cada probabilidad acumulada con un bosque separado y no combina umbrales; los árboles ordinales sin puntajes {cite:p}`tutz2022`, que combinan modelos binarios para predecir la clase ordinal; Ordinal Forest y fabOF {cite:p}`hornung2020,buczak2024fabof`, que usan puntajes de clase optimizados; y la descomposición de {cite:t}`frank2001`, que entrena un clasificador por umbral. En el conjunto Wine Quality, la literatura encontrada usa bosques y Extra-Trees como clasificadores estándar o la regresión ordinal clásica, pero no este mecanismo.
 
-La declaración tiene el alcance de la búsqueda: no se revisaron bases de pago (Scopus, Web of Science) ni literatura gris fuera de los repositorios consultados, y el texto completo solo se leyó cuando el resumen no permitía decidir. Antes de la entrega final se debe volver a ejecutar `buscar.py` y `citas.py` y actualizar la fecha.
+La declaración tiene el alcance de la búsqueda: no se revisaron bases de pago (Scopus, Web of Science) ni literatura gris fuera de los repositorios consultados, y el texto completo solo se leyó cuando el resumen no permitía decidir.

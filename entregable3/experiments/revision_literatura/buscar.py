@@ -2,7 +2,7 @@ import json, time, datetime, urllib.parse, urllib.request, xml.etree.ElementTree
 from pathlib import Path
 
 SALIDA = Path(__file__).with_name(f"busqueda_{datetime.date.today().isoformat()}.json")
-UA = {"User-Agent": "revision-literatura-curso-ML/1.0 (mailto:arafaelr@uninorte.edu.co)"}
+UA = {"User-Agent": "revision-literatura-curso-ML/1.0"}
 
 CADENAS = [
     {"id": "C1", "desc": "wine quality + random forest + ordinal",
